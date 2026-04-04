@@ -35,6 +35,17 @@ A unique two-stage video landing page for Rannaghar Caterer that creates an enga
 
 ## Implementation Status (December 4, 2026)
 
+### Latest Updates (Session 2)
+- ✅ **First landing page timer**: Increased from 3 to 10 seconds
+- ✅ **"Click Here" button**: Repositioned to top-right (at hand position)
+- ✅ **Main video auto-play**: Now plays automatically after clicking "Click Here"
+- ✅ **Mobile frame design**: Videos displayed in stylish iPhone-like frame with:
+  - Rounded corners and phone bezel
+  - Notch at top
+  - Dark decorative background with rotating gradient
+  - Perfect containment of 9:16 ratio videos
+- ✅ **Responsive mobile frame**: On mobile devices, frame expands to full screen
+
 ### ✅ Completed Features
 
 #### Frontend Components

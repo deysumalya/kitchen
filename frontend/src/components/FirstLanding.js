@@ -5,7 +5,7 @@ const FirstLanding = ({ onComplete }) => {
   useEffect(() => {
     const timer = setTimeout(() => {
       onComplete();
-    }, 3000);
+    }, 10000);
 
     return () => clearTimeout(timer);
   }, [onComplete]);

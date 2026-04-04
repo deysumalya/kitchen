@@ -45,9 +45,14 @@ const VideoExperience = () => {
   const handleClickHere = () => {
     setShowClickHere(false);
     setVideoStage('main');
-    if (mainVideoRef.current) {
-      mainVideoRef.current.play();
-    }
+    // Use setTimeout to ensure video element is rendered before playing
+    setTimeout(() => {
+      if (mainVideoRef.current) {
+        mainVideoRef.current.play().catch(err => {
+          console.log("Main video autoplay failed:", err);
+        });
+      }
+    }, 100);
   };
 
   const handleMainVideoEnd = () => {
@@ -67,49 +72,52 @@ const VideoExperience = () => {
       {/* Welcome Video Section */}
       {(videoStage === 'welcome' || videoStage === 'waiting') && (
         <div className="video-container">
-          <video
-            ref={welcomeVideoRef}
-            className="welcome-video"
-            muted
-            playsInline
-            onEnded={handleWelcomeVideoEnd}
-            onError={handleWelcomeVideoError}
-            crossOrigin="anonymous"
-            preload="auto"
-          >
-            <source src={welcomeVideoUrl} type="video/mp4" />
-            Your browser does not support the video tag.
-          </video>
+          {/* Mobile Frame */}
+          <div className="mobile-frame">
+            <video
+              ref={welcomeVideoRef}
+              className="welcome-video"
+              muted
+              playsInline
+              onEnded={handleWelcomeVideoEnd}
+              onError={handleWelcomeVideoError}
+              crossOrigin="anonymous"
+              preload="auto"
+            >
+              <source src={welcomeVideoUrl} type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
 
-          {/* Text Overlay */}
-          <motion.div
-            className="video-overlay"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1, delay: 0.5 }}
-          >
-            <div className="overlay-text">
-              <p className="welcome-text">Dear user,</p>
-              <h2 className="welcome-title">Welcome to Rannaghar Caterer</h2>
-            </div>
-          </motion.div>
+            {/* Text Overlay */}
+            <motion.div
+              className="video-overlay"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 1, delay: 0.5 }}
+            >
+              <div className="overlay-text">
+                <p className="welcome-text">Dear user,</p>
+                <h2 className="welcome-title">Welcome to Rannaghar Caterer</h2>
+              </div>
+            </motion.div>
 
-          {/* Click Here Button */}
-          <AnimatePresence>
-            {showClickHere && (
-              <motion.div
-                className="click-here-container"
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.8 }}
-                transition={{ duration: 0.4 }}
-              >
-                <button className="click-here-btn" onClick={handleClickHere}>
-                  Click Here
-                </button>
-              </motion.div>
-            )}
-          </AnimatePresence>
+            {/* Click Here Button - Top Right */}
+            <AnimatePresence>
+              {showClickHere && (
+                <motion.div
+                  className="click-here-container-topright"
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.8 }}
+                  transition={{ duration: 0.4 }}
+                >
+                  <button className="click-here-btn" onClick={handleClickHere}>
+                    Click Here
+                  </button>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
         </div>
       )}
 
@@ -121,18 +129,22 @@ const VideoExperience = () => {
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5 }}
         >
-          <video
-            ref={mainVideoRef}
-            className="main-video"
-            playsInline
-            controls
-            onEnded={handleMainVideoEnd}
-            crossOrigin="anonymous"
-            preload="auto"
-          >
-            <source src={mainVideoUrl} type="video/mp4" />
-            Your browser does not support the video tag.
-          </video>
+          {/* Mobile Frame */}
+          <div className="mobile-frame">
+            <video
+              ref={mainVideoRef}
+              className="main-video"
+              playsInline
+              controls
+              autoPlay
+              onEnded={handleMainVideoEnd}
+              crossOrigin="anonymous"
+              preload="auto"
+            >
+              <source src={mainVideoUrl} type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+          </div>
         </motion.div>
       )}
 
