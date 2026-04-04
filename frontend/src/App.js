@@ -120,19 +120,30 @@ const HomePage = () => {
   );
 };
 
+const Layout = ({ children }) => {
+  const location = useLocation();
+  const isHomePage = location.pathname === '/';
+  
+  return (
+    <div className={isHomePage ? "app-wrapper-home" : "min-h-screen bg-[#fcfaf7]"}>
+      {!isHomePage && <Navbar />}
+      <main>
+        {children}
+      </main>
+    </div>
+  );
+};
+
 function App() {
   return (
     <Router>
-      <div className="App min-h-screen bg-[#fcfaf7]">
-        <Navbar />
-        <main>
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/blog" element={<Blog />} />
-            <Route path="/gallery" element={<Gallery />} />
-          </Routes>
-        </main>
-      </div>
+      <Layout>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/blog" element={<Blog />} />
+          <Route path="/gallery" element={<Gallery />} />
+        </Routes>
+      </Layout>
     </Router>
   );
 }
