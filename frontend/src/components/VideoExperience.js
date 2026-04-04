@@ -86,7 +86,6 @@ const VideoExperience = () => {
               playsInline
               onEnded={handleWelcomeVideoEnd}
               onError={handleWelcomeVideoError}
-              crossOrigin="anonymous"
               preload="auto"
               controlsList="nodownload nofullscreen"
               disablePictureInPicture
@@ -145,7 +144,6 @@ const VideoExperience = () => {
               playsInline
               autoPlay
               onEnded={handleMainVideoEnd}
-              crossOrigin="anonymous"
               preload="auto"
               controlsList="nodownload nofullscreen noplaybackrate"
               disablePictureInPicture
