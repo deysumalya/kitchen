@@ -125,7 +125,7 @@ const Layout = ({ children }) => {
   const isHomePage = location.pathname === '/';
   
   return (
-    <div className={isHomePage ? "app-wrapper-home" : "min-h-screen bg-[#fcfaf7]"}>
+    <div className={isHomePage ? "App" : "App min-h-screen bg-[#fcfaf7]"}>
       {!isHomePage && <Navbar />}
       <main>
         {children}

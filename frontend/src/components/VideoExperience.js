@@ -8,7 +8,7 @@ const VideoExperience = () => {
   const welcomeVideoRef = useRef(null);
   const mainVideoRef = useRef(null);
 
-  const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+  const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || '';
   const welcomeVideoUrl = `${BACKEND_URL}/api/video/welcome`;
   const mainVideoUrl = `${BACKEND_URL}/api/video/main`;
 
