@@ -55,6 +55,12 @@ const VideoExperience = () => {
     }, 100);
   };
 
+  const handleMainVideoClick = (e) => {
+    // Prevent any interaction with the video
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
   const handleMainVideoEnd = () => {
     setVideoStage('complete');
   };
@@ -83,6 +89,9 @@ const VideoExperience = () => {
               onError={handleWelcomeVideoError}
               crossOrigin="anonymous"
               preload="auto"
+              controlsList="nodownload nofullscreen"
+              disablePictureInPicture
+              onContextMenu={(e) => e.preventDefault()}
             >
               <source src={welcomeVideoUrl} type="video/mp4" />
               Your browser does not support the video tag.
@@ -135,11 +144,16 @@ const VideoExperience = () => {
               ref={mainVideoRef}
               className="main-video"
               playsInline
-              controls
               autoPlay
               onEnded={handleMainVideoEnd}
               crossOrigin="anonymous"
               preload="auto"
+              controlsList="nodownload nofullscreen noplaybackrate"
+              disablePictureInPicture
+              disableRemotePlayback
+              onContextMenu={(e) => e.preventDefault()}
+              onClick={handleMainVideoClick}
+              onDoubleClick={handleMainVideoClick}
             >
               <source src={mainVideoUrl} type="video/mp4" />
               Your browser does not support the video tag.

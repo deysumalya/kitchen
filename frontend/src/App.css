@@ -208,6 +208,24 @@ body {
   height: 100%;
   object-fit: cover;
   border-radius: 30px;
+  pointer-events: auto;
+}
+
+/* Prevent video controls and interactions */
+.main-video::-webkit-media-controls {
+  display: none !important;
+}
+
+.main-video::-webkit-media-controls-enclosure {
+  display: none !important;
+}
+
+.main-video::-webkit-media-controls-panel {
+  display: none !important;
+}
+
+.main-video {
+  cursor: default;
 }
 
 /* Video Overlay */
@@ -220,7 +238,6 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(0, 0, 0, 0.3);
   pointer-events: none;
 }
 
@@ -228,27 +245,25 @@ body {
   text-align: center;
   color: white;
   padding: 40px;
-  background: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(12px);
+  /* Transparent background - no blur */
+  background: transparent;
   border-radius: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .welcome-text {
   font-size: 24px;
   font-weight: 300;
   margin-bottom: 12px;
-  color: rgba(255, 255, 255, 0.9);
+  color: white;
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8);
 }
 
 .welcome-title {
   font-size: 48px;
   font-weight: 700;
   margin: 0;
-  background: linear-gradient(135deg, #ffffff 0%, #f7f5f2 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: white;
+  text-shadow: 2px 2px 12px rgba(0, 0, 0, 0.9);
 }
 
 /* Click Here Button - Top Right Position */
@@ -448,8 +463,12 @@ body {
   }
 
   .click-here-container-topright {
-    top: 40px;
-    right: 20px;
+    position: fixed !important;
+    top: 743px !important;
+    left: 50% !important;
+    right: auto !important;
+    transform: translateX(-50%) !important;
+    margin-left: 232px !important;
   }
 
   /* Mobile Frame adjustments */
