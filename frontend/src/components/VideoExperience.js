@@ -1,53 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Phone, MessageCircle, ArrowRight, Utensils, ChefHat, Coffee, Wine } from 'lucide-react';
-
-const FloatingBackground = () => {
-  const icons = [Utensils, ChefHat, Wine, Coffee];
-  
-  const elements = Array.from({ length: 15 }).map((_, i) => {
-    const Icon = icons[i % icons.length];
-    
-    // Deterministic pseudo-random generation to avoid DOM jumping
-    const top = `${(i * 17) % 100}%`;
-    const left = `${(i * 23) % 100}%`;
-    const delay = (i * 1.5) % 5;
-    const duration = 20 + (i % 10);
-    const size = 32 + (i % 3) * 16;
-    
-    return (
-      <motion.div
-        key={i}
-        style={{
-          position: 'absolute',
-          top,
-          left,
-          color: '#FF8E53',
-        }}
-        initial={{ opacity: 0.03, y: 0, rotate: 0 }}
-        animate={{
-          opacity: [0.03, 0.08, 0.03],
-          y: [0, -30, 0],
-          rotate: [0, 45, 0],
-        }}
-        transition={{
-          duration: duration,
-          delay: delay,
-          repeat: Infinity,
-          ease: "linear"
-        }}
-      >
-        <Icon size={size} />
-      </motion.div>
-    );
-  });
-
-  return (
-    <div className="floating-background-container">
-      {elements}
-    </div>
-  );
-};
+import { Phone, MessageCircle, ArrowRight } from 'lucide-react';
 
 const VideoExperience = () => {
   const [videoStage, setVideoStage] = useState('welcome'); // 'welcome', 'waiting', 'main', 'complete'
