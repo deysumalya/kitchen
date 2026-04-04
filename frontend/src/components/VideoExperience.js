@@ -1,0 +1,202 @@
+import React, { useState, useRef, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Phone, MessageCircle } from 'lucide-react';
+
+const VideoExperience = () => {
+  const [videoStage, setVideoStage] = useState('welcome'); // 'welcome', 'waiting', 'main', 'complete'
+  const [showClickHere, setShowClickHere] = useState(false);
+  const welcomeVideoRef = useRef(null);
+  const mainVideoRef = useRef(null);
+
+  const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+  const welcomeVideoUrl = `${BACKEND_URL}/api/video/welcome`;
+  const mainVideoUrl = `${BACKEND_URL}/api/video/main`;
+
+  useEffect(() => {
+    if (videoStage === 'welcome' && welcomeVideoRef.current) {
+      // Add a small delay to ensure video is loaded
+      const timer = setTimeout(() => {
+        if (welcomeVideoRef.current) {
+          welcomeVideoRef.current.play().catch(err => {
+            console.log("Autoplay prevented:", err);
+            // If autoplay fails, show click here immediately
+            setShowClickHere(true);
+            setVideoStage('waiting');
+          });
+        }
+      }, 500);
+      return () => clearTimeout(timer);
+    }
+  }, [videoStage]);
+
+  const handleWelcomeVideoEnd = () => {
+    console.log("Welcome video ended");
+    setShowClickHere(true);
+    setVideoStage('waiting');
+  };
+
+  const handleWelcomeVideoError = (e) => {
+    console.error("Welcome video error:", e);
+    // If video fails to load, show click here button immediately
+    setShowClickHere(true);
+    setVideoStage('waiting');
+  };
+
+  const handleClickHere = () => {
+    setShowClickHere(false);
+    setVideoStage('main');
+    if (mainVideoRef.current) {
+      mainVideoRef.current.play();
+    }
+  };
+
+  const handleMainVideoEnd = () => {
+    setVideoStage('complete');
+  };
+
+  const handleCall = () => {
+    window.location.href = 'tel:+919831924872';
+  };
+
+  const handleWhatsApp = () => {
+    window.open('https://wa.me/919831924872', '_blank');
+  };
+
+  return (
+    <div className="video-experience">
+      {/* Welcome Video Section */}
+      {(videoStage === 'welcome' || videoStage === 'waiting') && (
+        <div className="video-container">
+          <video
+            ref={welcomeVideoRef}
+            className="welcome-video"
+            muted
+            playsInline
+            onEnded={handleWelcomeVideoEnd}
+            onError={handleWelcomeVideoError}
+            crossOrigin="anonymous"
+            preload="auto"
+          >
+            <source src={welcomeVideoUrl} type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+
+          {/* Text Overlay */}
+          <motion.div
+            className="video-overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1, delay: 0.5 }}
+          >
+            <div className="overlay-text">
+              <p className="welcome-text">Dear user,</p>
+              <h2 className="welcome-title">Welcome to Rannaghar Caterer</h2>
+            </div>
+          </motion.div>
+
+          {/* Click Here Button */}
+          <AnimatePresence>
+            {showClickHere && (
+              <motion.div
+                className="click-here-container"
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.8 }}
+                transition={{ duration: 0.4 }}
+              >
+                <button className="click-here-btn" onClick={handleClickHere}>
+                  Click Here
+                </button>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      )}
+
+      {/* Main Video Section */}
+      {videoStage === 'main' && (
+        <motion.div
+          className="video-container"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
+        >
+          <video
+            ref={mainVideoRef}
+            className="main-video"
+            playsInline
+            controls
+            onEnded={handleMainVideoEnd}
+            crossOrigin="anonymous"
+            preload="auto"
+          >
+            <source src={mainVideoUrl} type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+        </motion.div>
+      )}
+
+      {/* Complete Section - CTAs and Message */}
+      {videoStage === 'complete' && (
+        <motion.div
+          className="complete-section"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.6 }}
+        >
+          <div className="complete-content">
+            <motion.h2
+              className="thank-you-title"
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.2 }}
+            >
+              Let's Make Your Event Memorable
+            </motion.h2>
+
+            <motion.div
+              className="cta-buttons"
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.4 }}
+            >
+              <button className="cta-btn cta-call" onClick={handleCall}>
+                <Phone size={20} />
+                <span>Call Now</span>
+              </button>
+              <button className="cta-btn cta-whatsapp" onClick={handleWhatsApp}>
+                <MessageCircle size={20} />
+                <span>WhatsApp</span>
+              </button>
+            </motion.div>
+
+            <motion.p
+              className="contact-number"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.6 }}
+            >
+              +91 9831924872
+            </motion.p>
+
+            <motion.div
+              className="owner-message"
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.8 }}
+            >
+              <div className="message-card">
+                <p className="message-text">
+                  "We provide catering service for birthday, wedding or for any occasion to make the celebration more enjoyable with mouth watering food."
+                </p>
+                <p className="message-signature">— Rannaghar Caterer</p>
+              </div>
+            </motion.div>
+          </div>
+        </motion.div>
+      )}
+    </div>
+  );
+};
+
+export default VideoExperience;
