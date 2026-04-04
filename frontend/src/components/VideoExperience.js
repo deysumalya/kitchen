@@ -1,6 +1,53 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Phone, MessageCircle } from 'lucide-react';
+import { Phone, MessageCircle, ArrowRight, Utensils, ChefHat, Coffee, Wine } from 'lucide-react';
+
+const FloatingBackground = () => {
+  const icons = [Utensils, ChefHat, Wine, Coffee];
+  
+  const elements = Array.from({ length: 15 }).map((_, i) => {
+    const Icon = icons[i % icons.length];
+    
+    // Deterministic pseudo-random generation to avoid DOM jumping
+    const top = `${(i * 17) % 100}%`;
+    const left = `${(i * 23) % 100}%`;
+    const delay = (i * 1.5) % 5;
+    const duration = 20 + (i % 10);
+    const size = 32 + (i % 3) * 16;
+    
+    return (
+      <motion.div
+        key={i}
+        style={{
+          position: 'absolute',
+          top,
+          left,
+          color: '#FF8E53',
+        }}
+        initial={{ opacity: 0.03, y: 0, rotate: 0 }}
+        animate={{
+          opacity: [0.03, 0.08, 0.03],
+          y: [0, -30, 0],
+          rotate: [0, 45, 0],
+        }}
+        transition={{
+          duration: duration,
+          delay: delay,
+          repeat: Infinity,
+          ease: "linear"
+        }}
+      >
+        <Icon size={size} />
+      </motion.div>
+    );
+  });
+
+  return (
+    <div className="floating-background-container">
+      {elements}
+    </div>
+  );
+};
 
 const VideoExperience = () => {
   const [videoStage, setVideoStage] = useState('welcome'); // 'welcome', 'waiting', 'main', 'complete'
@@ -76,7 +123,9 @@ const VideoExperience = () => {
     <div className="video-experience">
       {/* Welcome Video Section */}
       {(videoStage === 'welcome' || videoStage === 'waiting') && (
-        <div className="video-container">
+        <>
+          <FloatingBackground />
+          <div className="video-container">
           {/* Mobile Frame */}
           <div className="mobile-frame">
             <video
@@ -119,19 +168,23 @@ const VideoExperience = () => {
                   transition={{ duration: 0.4 }}
                 >
                   <button className="click-here-btn" onClick={handleClickHere}>
-                    Click Here
+                    <span>Click Here</span>
+                    <ArrowRight size={20} />
                   </button>
                 </motion.div>
               )}
             </AnimatePresence>
           </div>
         </div>
+        </>
       )}
 
       {/* Main Video Section */}
       {videoStage === 'main' && (
-        <motion.div
-          className="video-container"
+        <>
+          <FloatingBackground />
+          <motion.div
+            className="video-container"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5 }}
@@ -157,6 +210,7 @@ const VideoExperience = () => {
             </video>
           </div>
         </motion.div>
+        </>
       )}
 
       {/* Complete Section - CTAs and Message */}
