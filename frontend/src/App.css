@@ -464,11 +464,11 @@ body {
 
   .click-here-container-topright {
     position: fixed !important;
-    top: 743px !important;
+    top: 334px !important;
     left: 50% !important;
     right: auto !important;
     transform: translateX(-50%) !important;
-    margin-left: 232px !important;
+    margin-left: 0 !important;
   }
 
   /* Mobile Frame adjustments */
