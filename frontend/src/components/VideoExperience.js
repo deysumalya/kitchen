@@ -124,7 +124,6 @@ const VideoExperience = () => {
       {/* Welcome Video Section */}
       {(videoStage === 'welcome' || videoStage === 'waiting') && (
         <>
-          <FloatingBackground />
           <div className="video-container">
           {/* Mobile Frame */}
           <div className="mobile-frame">
@@ -182,7 +181,6 @@ const VideoExperience = () => {
       {/* Main Video Section */}
       {videoStage === 'main' && (
         <>
-          <FloatingBackground />
           <motion.div
             className="video-container"
           initial={{ opacity: 0 }}
