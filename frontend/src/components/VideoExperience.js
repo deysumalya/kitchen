@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Phone, MessageCircle, ArrowRight } from 'lucide-react';
+import { Phone, MessageCircle, ArrowRight, MapPin } from 'lucide-react';
 
 import dish1 from '../assets/dish1.png';
 import dish2 from '../assets/dish2.png';
@@ -193,6 +193,10 @@ const VideoExperience = () => {
     window.open('https://wa.me/919831924872', '_blank');
   };
 
+  const handleMapLink = () => {
+    window.open('https://share.google/FkFf57Jsei0Qkx5AV', '_blank');
+  };
+
   return (
     <div className="video-experience">
       {/* Floating Dish Decorations - ONLY SHOW DURING MAIN VIDEO */}
@@ -336,6 +340,10 @@ const VideoExperience = () => {
               <button className="cta-btn cta-whatsapp" onClick={handleWhatsApp}>
                 <MessageCircle size={20} />
                 <span>WhatsApp</span>
+              </button>
+              <button className="cta-btn cta-map" onClick={handleMapLink}>
+                <MapPin size={20} />
+                <span>Find Us on Map</span>
               </button>
             </motion.div>
 

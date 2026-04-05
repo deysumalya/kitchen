@@ -427,6 +427,17 @@ body {
   box-shadow: 0 6px 30px rgba(37, 211, 102, 0.5);
 }
 
+.cta-map {
+  background: #4285F4;
+  color: white;
+  box-shadow: 0 4px 20px rgba(66, 133, 244, 0.3);
+}
+
+.cta-map:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 30px rgba(66, 133, 244, 0.5);
+}
+
 .cta-btn:active {
   transform: translateY(0);
 }
