@@ -38,10 +38,12 @@ const FloatingDishes = () => {
         dishImg,
         id: i,
         left: isLeftEdge ? `${Math.floor(Math.random() * 20)}%` : `${Math.floor(Math.random() * 15) + 75}%`,
-        top: `-${Math.floor(Math.random() * 50 + 20)}vh`,
-        duration: 18 + (i % 5) * 6,
-        delay: (i * 1.5),
-        size: 120 + (i % 3) * 60
+        // Start much higher to prevent popping in mid-air
+        top: `-${Math.floor(Math.random() * 60 + 20)}vh`,
+        // Massively randomize speeds from crazy fast to painfully slow floating
+        duration: Math.floor(Math.random() * 35) + 10,
+        delay: Math.random() * 10,
+        size: Math.floor(Math.random() * 100) + 100
       };
     });
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -49,41 +51,46 @@ const FloatingDishes = () => {
   
   const elements = dishConfigs.map((config) => {
     
+    const isClicked = clickedDishes.has(config.id);
+
     return (
-      <AnimatePresence key={config.id}>
-        {!clickedDishes.has(config.id) && (
-          <motion.img
-            src={config.dishImg}
-            alt={`Delicious catering dish ${config.id + 1}`}
-            onClick={() => playClickSound(config.id)}
-            whileHover={{ scale: 1.15 }}
-            whileTap={{ scale: 0.9 }}
-            style={{
-              position: 'absolute',
-              top: config.top,
-              left: config.left,
-              width: `${config.size}px`,
-              height: 'auto',
-              objectFit: 'contain',
-              filter: 'drop-shadow(0px 15px 25px rgba(0,0,0,0.6))',
-              pointerEvents: 'auto',
-              cursor: 'pointer',
-              zIndex: 5,
-            }}
-            initial={{ opacity: 1, y: 0 }}
-            animate={{
-              y: '140vh', // Fall in a perfectly straight drop past the bottom
-            }}
-            exit={{ opacity: 0, scale: 0, rotate: 180 }}
-            transition={{
-              duration: config.duration,
-              delay: config.delay,
-              repeat: Infinity,
-              ease: "linear" // Linear so gravity looks consistent without stopping
-            }}
-          />
-        )}
-      </AnimatePresence>
+      <motion.img
+        key={config.id}
+        src={config.dishImg}
+        alt={`Delicious catering dish ${config.id + 1}`}
+        onClick={() => playClickSound(config.id)}
+        whileHover={!isClicked ? { scale: 1.15 } : {}}
+        whileTap={!isClicked ? { scale: 0.9 } : {}}
+        style={{
+          position: 'absolute',
+          top: config.top,
+          left: config.left,
+          width: `${config.size}px`,
+          height: 'auto',
+          objectFit: 'contain',
+          filter: 'drop-shadow(0px 15px 25px rgba(0,0,0,0.6))',
+          pointerEvents: isClicked ? 'none' : 'auto',
+          cursor: isClicked ? 'default' : 'pointer',
+          zIndex: 5,
+        }}
+        initial={{ opacity: 1, y: 0 }}
+        // Conditionally hijack the animation if clicked
+        animate={
+          isClicked 
+            ? { scale: 0, opacity: 0, rotate: 180 } 
+            : { y: '150vh' } // Fall deep past screen bottom
+        }
+        transition={
+          isClicked
+            ? { duration: 0.4, ease: "easeOut" } // Fast suck-in pop animation
+            : {
+                duration: config.duration,
+                delay: config.delay,
+                repeat: Infinity,
+                ease: "linear"
+              }
+        }
+      />
     );
   });
 
