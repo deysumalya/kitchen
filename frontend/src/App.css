@@ -343,6 +343,9 @@ body {
   position: absolute;
   top: 0;
   left: 0;
+  height: 100vh;
+  overflow-y: auto;
+  align-items: flex-start; /* Prevent flex from clipping top content when scrolling */
 }
 
 .complete-section.light-theme .thank-you-title {
