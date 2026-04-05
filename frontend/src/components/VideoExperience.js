@@ -133,6 +133,7 @@ const VideoExperience = () => {
   const [showClickHere, setShowClickHere] = useState(false);
   const welcomeVideoRef = useRef(null);
   const mainVideoRef = useRef(null);
+  const isClickingRef = useRef(false);
 
   const welcomeVideoUrl = "https://customer-assets.emergentagent.com/job_51748072-d3a9-4e11-81ea-349df3f9a9ea/artifacts/j5snnush_WhatsApp%20Video%202026-04-04%20at%203.48.23%20PM%20%281%29.mp4";
   const mainVideoUrl = "https://customer-assets.emergentagent.com/job_51748072-d3a9-4e11-81ea-349df3f9a9ea/artifacts/qzo32wn2_km_20260404_720p_60f_20260404_195649.mp4";
@@ -168,6 +169,10 @@ const VideoExperience = () => {
   };
 
   const handleClickHere = () => {
+    // Prevent double clicking from queueing multiple timeouts and breaking the media pipeline
+    if (isClickingRef.current) return;
+    isClickingRef.current = true;
+    
     setShowClickHere(false);
     setVideoStage('main');
     // Use setTimeout to ensure video element is rendered before playing
@@ -186,8 +191,13 @@ const VideoExperience = () => {
     e.stopPropagation();
   };
 
-  const handleMainVideoEnd = () => {
-    setVideoStage('complete');
+  const handleMainVideoEnd = (e) => {
+    // Strict guard: prevent iOS/Safari from firing false onEnded events when video initializes at 0s
+    if (e.target && e.target.currentTime > 1) {
+      setVideoStage('complete');
+    } else {
+      console.log('Video fired onEnded prematurely at 0 seconds. Ignored to prevent skipping straight to the white screen.');
+    }
   };
 
   const handleCall = () => {
