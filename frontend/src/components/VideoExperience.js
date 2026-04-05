@@ -16,6 +16,12 @@ import dish10 from '../assets/dish10.png';
 const FloatingDishes = () => {
   const dishes = [dish1, dish2, dish3, dish4, dish5, dish6, dish7, dish8, dish9, dish10];
   
+  const playClickSound = () => {
+    const audio = new Audio('/click.mp3');
+    // Rapidly play without waiting, allowing overlapping clicks
+    audio.play().catch(err => console.log('Audio playback prevented:', err));
+  };
+  
   const elements = dishes.map((dishImg, i) => {
     // Confine firmly to the left and right gutters so they don't fall behind the smartphone
     const isLeftEdge = i % 2 === 0;
@@ -34,6 +40,9 @@ const FloatingDishes = () => {
         key={i}
         src={dishImg}
         alt={`Delicious catering dish ${i + 1}`}
+        onClick={playClickSound}
+        whileHover={{ scale: 1.15 }}
+        whileTap={{ scale: 0.9 }}
         style={{
           position: 'absolute',
           top,
@@ -42,8 +51,9 @@ const FloatingDishes = () => {
           height: 'auto',
           objectFit: 'contain',
           filter: 'drop-shadow(0px 15px 25px rgba(0,0,0,0.6))',
-          pointerEvents: 'none',
-          zIndex: 0,
+          pointerEvents: 'auto',
+          cursor: 'pointer',
+          zIndex: 5,
         }}
         initial={{ opacity: 1, y: 0 }}
         animate={{
@@ -60,9 +70,9 @@ const FloatingDishes = () => {
   });
 
   return (
-    <div className="floating-background-container" style={{ zIndex: 0, overflow: 'hidden' }}>
-      {elements}
-    </div>
+      <div className="floating-background-container" style={{ zIndex: 5, overflow: 'hidden', pointerEvents: 'none' }}>
+        {elements}
+      </div>
   );
 };
 
