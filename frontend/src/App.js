@@ -6,6 +6,7 @@ import VideoExperience from './components/VideoExperience';
 import Blog from './components/Blog';
 import Gallery from './components/Gallery';
 import { Menu, X, Home as HomeIcon, BookOpen, Image as ImageIcon } from 'lucide-react';
+import ErrorBoundary from './components/ErrorBoundary';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -136,15 +137,17 @@ const Layout = ({ children }) => {
 
 function App() {
   return (
-    <Router>
-      <Layout>
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/blog" element={<Blog />} />
-          <Route path="/gallery" element={<Gallery />} />
-        </Routes>
-      </Layout>
-    </Router>
+    <ErrorBoundary>
+      <Router>
+        <Layout>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/blog" element={<Blog />} />
+            <Route path="/gallery" element={<Gallery />} />
+          </Routes>
+        </Layout>
+      </Router>
+    </ErrorBoundary>
   );
 }
 

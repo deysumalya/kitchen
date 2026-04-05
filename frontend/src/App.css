@@ -534,6 +534,10 @@ body {
   .main-video {
     border-radius: 0;
   }
+  
+  .desktop-only-rain {
+    display: none !important;
+  }
 }
 
 @media (max-width: 480px) {

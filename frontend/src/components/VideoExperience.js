@@ -13,47 +13,14 @@ import dish9 from '../assets/dish9.png';
 import dish10 from '../assets/dish10.png';
 
 const FloatingDishes = () => {
-  // Only render on desktop (width > 768px)
-  const [isDesktop, setIsDesktop] = useState(window.innerWidth > 768);
-  
-  useEffect(() => {
-    const handleResize = () => setIsDesktop(window.innerWidth > 768);
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
-  // 30% Density: strictly limit the number of active falling elements to 6 distinct dishes
-  const baseDishes = [dish1, dish2, dish3, dish4, dish5, dish6, dish7, dish8, dish9, dish10];
-  const dishes = baseDishes.slice(0, 6);
-  
   const [clickedDishes, setClickedDishes] = useState(new Set());
+  const [dishConfigs, setDishConfigs] = useState([]);
   
-  const playClickSound = (index) => {
-    const audio = new Audio('/click.mp3');
-    // Rapidly play without waiting, allowing overlapping clicks
-    audio.play().catch(err => console.log('Audio playback prevented:', err));
+  // Calculate configurations identically ONCE at mount without conditional hooks
+  useEffect(() => {
+    const baseDishes = [dish1, dish2, dish3, dish4, dish5, dish6];
     
-    // Add to clicked state
-    setClickedDishes(prev => {
-      const next = new Set(prev);
-      next.add(index);
-      return next;
-    });
-
-    // Automatically "respawn" the dish after a random delay (between 10s and 20s) 
-    // so the rain never runs out of dishes even if the user clicks all of them!
-    setTimeout(() => {
-      setClickedDishes(current => {
-        const nextSet = new Set(current);
-        nextSet.delete(index);
-        return nextSet;
-      });
-    }, Math.floor(Math.random() * 10000) + 10000);
-  };
-  
-  // Cache the random physics properties so they don't jump and break the exit animation when React re-renders!
-  const dishConfigs = React.useMemo(() => {
-    return dishes.map((dishImg, i) => {
+    const configs = baseDishes.map((dishImg, i) => {
       const isLeftEdge = i % 2 === 0;
       return {
         dishImg,
@@ -67,12 +34,29 @@ const FloatingDishes = () => {
         size: Math.floor(Math.random() * 100) + 100
       };
     });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    
+    setDishConfigs(configs);
   }, []);
   
-  // Wait to do the early desktop return until ALL React hooks have safely initialized
-  if (!isDesktop) return null;
+  const playClickSound = (index) => {
+    const audio = new Audio('/click.mp3');
+    audio.play().catch(err => console.log('Audio playback prevented:', err));
+    
+    setClickedDishes(prev => {
+      const next = new Set(prev);
+      next.add(index);
+      return next;
+    });
 
+    setTimeout(() => {
+      setClickedDishes(current => {
+        const nextSet = new Set(current);
+        nextSet.delete(index);
+        return nextSet;
+      });
+    }, Math.floor(Math.random() * 10000) + 10000);
+  };
+  
   const elements = dishConfigs.map((config) => {
     
     // Check if clicked
@@ -122,7 +106,7 @@ const FloatingDishes = () => {
   });
 
   return (
-      <div className="floating-background-container" style={{ zIndex: 5, overflow: 'hidden', pointerEvents: 'none' }}>
+      <div className="floating-background-container desktop-only-rain" style={{ zIndex: 5, overflow: 'hidden', pointerEvents: 'none' }}>
         {elements}
       </div>
   );
@@ -192,11 +176,12 @@ const VideoExperience = () => {
   };
 
   const handleMainVideoEnd = (e) => {
-    // Strict guard: prevent iOS/Safari from firing false onEnded events when video initializes at 0s
-    if (e.target && e.target.currentTime > 1) {
+    // Extreme strict guard: The Vercel stream bug must not be allowed to instantly push the browser to the white
+    // CTA screen! The video must prove it actually played for at least 5 SECONDS.
+    if (e.target && e.target.currentTime > 5) {
       setVideoStage('complete');
     } else {
-      console.log('Video fired onEnded prematurely at 0 seconds. Ignored to prevent skipping straight to the white screen.');
+      console.log('Video fired false onEnded event before completion. Ignored to prevent skipping straight to the white screen.');
     }
   };
 
