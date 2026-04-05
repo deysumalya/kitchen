@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
+import Navbar from './Navbar';
 import { Phone, MessageCircle, ArrowRight, MapPin } from 'lucide-react';
 
 import dish1 from '../assets/dish1.png';
@@ -116,6 +117,7 @@ const FloatingDishes = () => {
 const VideoExperience = () => {
   const [videoStage, setVideoStage] = useState('welcome'); // 'welcome', 'waiting', 'main', 'complete'
   const [showClickHere, setShowClickHere] = useState(false);
+  const [showMapModal, setShowMapModal] = useState(false);
   const welcomeVideoRef = useRef(null);
   const mainVideoRef = useRef(null);
   const isClickingRef = useRef(false);
@@ -196,9 +198,12 @@ const VideoExperience = () => {
   };
 
   const handleMapLink = () => {
-    // Alert the user with the emotional hook before redirecting them to the low-review map pin
-    alert("We might be new to Google, but our passion for authentic Bengali catering is unmatched. Please give us a chance to make your event unforgettable!");
+    setShowMapModal(true);
+  };
+
+  const actuallyOpenMap = () => {
     window.open('https://www.google.com/maps/search/?api=1&query=Rannaghar+Caterer+Brojonath+Lahiri+Ln+Howrah', '_blank');
+    setShowMapModal(false);
   };
 
   return (
@@ -304,7 +309,10 @@ const VideoExperience = () => {
           animate={{ opacity: 1 }}
           transition={{ duration: 0.6 }}
         >
-          <div className="complete-content">
+          <div className="absolute inset-x-0 top-0 z-50">
+            <Navbar />
+          </div>
+          <div className="complete-content pt-24">
             
             {/* The Brand Logo Animation Video plays with sound! */}
             <motion.div 
@@ -389,6 +397,39 @@ const VideoExperience = () => {
                </button>
             </motion.div>
           </div>
+
+          {/* Underdog Map Modal Overlay */}
+          <AnimatePresence>
+            {showMapModal && (
+              <motion.div 
+                className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+              >
+                <motion.div 
+                  className="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl text-center border border-gray-100"
+                  initial={{ scale: 0.9, y: 20 }}
+                  animate={{ scale: 1, y: 0 }}
+                  exit={{ scale: 0.9, y: 20 }}
+                >
+                  <h3 className="text-2xl font-bold mb-4 text-gray-900 border-b border-gray-100 pb-4">A Quick Note Before We Go...</h3>
+                  <p className="text-gray-700 mb-8 font-medium leading-relaxed">
+                    We might be new to Google Maps, but our passion for authentic Bengali catering is unmatched. Please call us and give us a chance to make your event truly unforgettable!
+                  </p>
+                  <div className="flex flex-col gap-3">
+                    <button onClick={actuallyOpenMap} className="bg-[#4285F4] hover:bg-[#3367d6] transition-colors text-white font-bold py-4 px-8 rounded-full w-full shadow-lg flex items-center justify-center gap-2">
+                       <MapPin size={20} />
+                       Continue to Google Maps
+                    </button>
+                    <button onClick={() => setShowMapModal(false)} className="text-gray-500 font-medium py-3 hover:text-gray-800 transition-colors">
+                       Cancel
+                    </button>
+                  </div>
+                </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </motion.div>
       )}
     </div>
