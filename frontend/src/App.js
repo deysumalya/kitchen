@@ -31,15 +31,15 @@ const Layout = ({ children }) => {
   }, []);
 
   const selectLanguage = (code) => {
-    // Save current page so we return after reload
-    sessionStorage.setItem('rannaghar_redirect_path', window.location.pathname + window.location.search);
+    const currentHref = window.location.href;
     document.cookie = `googtrans=/en/${code}; path=/;`;
     if (window.location.hostname !== 'localhost') {
       document.cookie = `googtrans=/en/${code}; path=/; domain=${window.location.hostname}`;
     }
     localStorage.setItem('rannaghar_lang', code);
     setShowLanguageModal(false);
-    window.location.reload();
+    // Use explicit href so Vercel routes to the correct page, not just '/'
+    window.location.href = currentHref;
   };
   
   return (

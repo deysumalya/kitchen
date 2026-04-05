@@ -15,13 +15,13 @@ const Navbar = () => {
   ];
 
   const selectLanguage = (code) => {
-    sessionStorage.setItem('rannaghar_redirect_path', window.location.pathname + window.location.search);
+    const currentHref = window.location.href;
     document.cookie = `googtrans=/en/${code}; path=/;`;
     if (window.location.hostname !== 'localhost') {
         document.cookie = `googtrans=/en/${code}; path=/; domain=${window.location.hostname}`;
     }
     localStorage.setItem('rannaghar_lang', code);
-    window.location.reload();
+    window.location.href = currentHref;
   };
 
   return (
