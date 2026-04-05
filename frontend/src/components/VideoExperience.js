@@ -17,14 +17,15 @@ const FloatingDishes = () => {
   const dishes = [dish1, dish2, dish3, dish4, dish5, dish6, dish7, dish8, dish9, dish10];
   
   const elements = dishes.map((dishImg, i) => {
-    // Generate scattered positions ensuring they stay mostly on the outer edge
-    const isLeftEdge = i % 2 === 0;
-    const top = `${Math.floor(Math.random() * 80) + 10}%`;
-    const left = isLeftEdge ? `${Math.floor(Math.random() * 20)}%` : `${Math.floor(Math.random() * 20) + 75}%`;
+    // Scatter horizontally across the whole screen since they fall behind the video
+    const left = `${Math.floor(Math.random() * 90)}%`;
+    // Stagger the initial vertical start position slightly so they don't all clump
+    const top = `-${Math.floor(Math.random() * 20 + 20)}vh`; 
     
-    const delay = (i * 2);
-    const duration = 25 + (i % 5) * 5;
-    const size = 120 + (i % 3) * 40;
+    // Randomize falling speed to create depth (slower = further away, faster = closer)
+    const duration = 15 + (i % 5) * 5;
+    const delay = (i * 1.5);
+    const size = 100 + (i % 3) * 60;
     
     return (
       <motion.img
@@ -38,28 +39,27 @@ const FloatingDishes = () => {
           width: `${size}px`,
           height: 'auto',
           objectFit: 'contain',
-          filter: 'drop-shadow(0px 10px 15px rgba(0,0,0,0.5))',
+          filter: 'drop-shadow(0px 15px 25px rgba(0,0,0,0.6))',
           pointerEvents: 'none',
           zIndex: 0,
         }}
-        initial={{ opacity: 0, y: 50, rotate: 0 }}
+        initial={{ opacity: 1, y: 0, rotate: 0 }}
         animate={{
-          opacity: [0, 0.8, 0.6, 0.8, 0],
-          y: [0, -40, 20, -10, 0],
-          rotate: [0, 10, -5, 5, 0],
+          y: '140vh', // Fall way past the bottom of the screen
+          rotate: [0, (i % 2 === 0 ? 1 : -1) * 360], // Gently spin while tumbling down
         }}
         transition={{
           duration: duration,
           delay: delay,
           repeat: Infinity,
-          ease: "easeInOut"
+          ease: "linear" // Linear so gravity looks consistent without stopping
         }}
       />
     );
   });
 
   return (
-    <div className="floating-background-container" style={{ zIndex: 0 }}>
+    <div className="floating-background-container" style={{ zIndex: 0, overflow: 'hidden' }}>
       {elements}
     </div>
   );
