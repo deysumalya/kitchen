@@ -4,6 +4,7 @@ import './App.css';
 import VideoExperience from './components/VideoExperience';
 import Blog from './components/Blog';
 import Gallery from './components/Gallery';
+import MenuComponent from './components/Menu';
 import { Menu, X, Home as HomeIcon, BookOpen, Image as ImageIcon } from 'lucide-react';
 import ErrorBoundary from './components/ErrorBoundary';
 
@@ -14,6 +15,7 @@ const Navbar = () => {
 
   const navLinks = [
     { name: 'Home', path: '/', icon: HomeIcon },
+    { name: 'Menu', path: '/menu', icon: BookOpen },
     { name: 'Blog', path: '/blog', icon: BookOpen },
     { name: 'Gallery', path: '/gallery', icon: ImageIcon },
   ];
@@ -113,6 +115,7 @@ function App() {
         <Layout>
           <Routes>
             <Route path="/" element={<HomePage />} />
+            <Route path="/menu" element={<MenuComponent />} />
             <Route path="/blog" element={<Blog />} />
             <Route path="/gallery" element={<Gallery />} />
           </Routes>

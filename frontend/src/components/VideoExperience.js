@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import { Phone, MessageCircle, ArrowRight, MapPin } from 'lucide-react';
 
 import dish1 from '../assets/dish1.png';
@@ -118,6 +119,7 @@ const VideoExperience = () => {
   const welcomeVideoRef = useRef(null);
   const mainVideoRef = useRef(null);
   const isClickingRef = useRef(false);
+  const navigate = useNavigate();
 
   const welcomeVideoUrl = "https://customer-assets.emergentagent.com/job_51748072-d3a9-4e11-81ea-349df3f9a9ea/artifacts/j5snnush_WhatsApp%20Video%202026-04-04%20at%203.48.23%20PM%20%281%29.mp4";
   const mainVideoUrl = "https://customer-assets.emergentagent.com/job_51748072-d3a9-4e11-81ea-349df3f9a9ea/artifacts/qzo32wn2_km_20260404_720p_60f_20260404_195649.mp4";
@@ -194,7 +196,9 @@ const VideoExperience = () => {
   };
 
   const handleMapLink = () => {
-    window.open('https://share.google/FkFf57Jsei0Qkx5AV', '_blank');
+    // Alert the user with the emotional hook before redirecting them to the low-review map pin
+    alert("We might be new to Google, but our passion for authentic Bengali catering is unmatched. Please give us a chance to make your event unforgettable!");
+    window.open('https://www.google.com/maps/search/?api=1&query=Rannaghar+Caterer+Brojonath+Lahiri+Ln+Howrah', '_blank');
   };
 
   return (
@@ -368,6 +372,21 @@ const VideoExperience = () => {
                 </p>
                 <p className="message-signature">— Rannaghar Caterer</p>
               </div>
+            </motion.div>
+
+            {/* Explict Navigation Links */}
+            <motion.div
+              className="mt-12 flex flex-wrap justify-center gap-4 border-t border-gray-100 pt-8 pb-4"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.9 }}
+            >
+               <button onClick={() => navigate('/menu')} className="text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 font-medium rounded-full px-6 py-2 transition-colors flex items-center gap-2">
+                  View Sample Menu
+               </button>
+               <button onClick={() => navigate('/blog')} className="text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 font-medium rounded-full px-6 py-2 transition-colors flex items-center gap-2">
+                  Read Our Articles
+               </button>
             </motion.div>
           </div>
         </motion.div>
