@@ -19,9 +19,12 @@ const Navbar = () => {
         <div className="flex justify-between h-16">
           <div className="flex items-center">
             <Link to="/" className="flex-shrink-0 flex items-center">
-              <span className="text-xl font-bold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">
-                Rannaghar
-              </span>
+              <img 
+                src="/main-logo.png" 
+                alt="Rannaghar Caterer Logo" 
+                className="h-12 w-auto object-contain"
+                style={{ mixBlendMode: 'multiply' }}
+              />
             </Link>
           </div>
           
