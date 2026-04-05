@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
 import './App.css';
-import FirstLanding from './components/FirstLanding';
 import VideoExperience from './components/VideoExperience';
 import Blog from './components/Blog';
 import Gallery from './components/Gallery';
@@ -88,36 +87,8 @@ const Navbar = () => {
 };
 
 const HomePage = () => {
-  const [stage, setStage] = useState(null); // null, 'first', 'video'
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    const hasVisited = localStorage.getItem('rannaghar_visited');
-    if (hasVisited) {
-      setStage('video');
-    } else {
-      setStage('first');
-      localStorage.setItem('rannaghar_visited', 'true');
-    }
-    setIsLoading(false);
-  }, []);
-
-  const handleFirstLandingComplete = () => {
-    setStage('video');
-  };
-
-  if (isLoading) {
-    return <div className="App" style={{ background: '#f7f5f2' }}></div>;
-  }
-
   return (
-    <>
-      {stage === 'first' ? (
-        <FirstLanding onComplete={handleFirstLandingComplete} />
-      ) : (
-        <VideoExperience />
-      )}
-    </>
+    <VideoExperience />
   );
 };
 

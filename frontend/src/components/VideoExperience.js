@@ -228,8 +228,8 @@ const VideoExperience = () => {
               transition={{ duration: 1, delay: 0.5 }}
             >
               <div className="overlay-text">
-                <p className="welcome-text">Dear user,</p>
-                <h2 className="welcome-title">Welcome to Rannaghar Caterer</h2>
+                <h2 className="welcome-text">Premium Catering in Kolkata & Howrah</h2>
+                <h1 className="welcome-title">Welcome to Rannaghar Caterer</h1>
               </div>
             </motion.div>
 
