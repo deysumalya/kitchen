@@ -14,7 +14,10 @@ import dish9 from '../assets/dish9.png';
 import dish10 from '../assets/dish10.png';
 
 const FloatingDishes = () => {
-  const dishes = [dish1, dish2, dish3, dish4, dish5, dish6, dish7, dish8, dish9, dish10];
+  const baseDishes = [dish1, dish2, dish3, dish4, dish5, dish6, dish7, dish8, dish9, dish10];
+  // Multiply the dishes array to spawn 40 total dishes in the rain sequence to make it look dense and plentiful
+  const dishes = [...baseDishes, ...baseDishes, ...baseDishes, ...baseDishes];
+  
   const [clickedDishes, setClickedDishes] = useState(new Set());
   
   const playClickSound = (index) => {
@@ -28,6 +31,16 @@ const FloatingDishes = () => {
       next.add(index);
       return next;
     });
+
+    // Automatically "respawn" the dish after a random delay (between 10s and 20s) 
+    // so the rain never runs out of dishes even if the user clicks all of them!
+    setTimeout(() => {
+      setClickedDishes(current => {
+        const nextSet = new Set(current);
+        nextSet.delete(index);
+        return nextSet;
+      });
+    }, Math.floor(Math.random() * 10000) + 10000);
   };
   
   // Cache the random physics properties so they don't jump and break the exit animation when React re-renders!
