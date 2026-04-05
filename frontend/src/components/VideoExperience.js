@@ -13,9 +13,20 @@ import dish9 from '../assets/dish9.png';
 import dish10 from '../assets/dish10.png';
 
 const FloatingDishes = () => {
+  // Only render on desktop (width > 768px)
+  const [isDesktop, setIsDesktop] = useState(window.innerWidth > 768);
+  
+  useEffect(() => {
+    const handleResize = () => setIsDesktop(window.innerWidth > 768);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  if (!isDesktop) return null;
+
+  // 30% Density: strictly limit the number of active falling elements to 6 distinct dishes
   const baseDishes = [dish1, dish2, dish3, dish4, dish5, dish6, dish7, dish8, dish9, dish10];
-  // Reduce to 20 dishes so it looks balanced without obvious duplicates right next to each other
-  const dishes = [...baseDishes, ...baseDishes];
+  const dishes = baseDishes.slice(0, 6);
   
   const [clickedDishes, setClickedDishes] = useState(new Set());
   
@@ -263,7 +274,7 @@ const VideoExperience = () => {
               ref={mainVideoRef}
               className="main-video"
               playsInline
-              autoPlay
+              // STRICTLY NO AUTOPLAY ATTRIBUTE HERE to prevent browser double-buffering audio
               onEnded={handleMainVideoEnd}
               preload="auto"
               controlsList="nodownload nofullscreen noplaybackrate"
