@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Globe2 } from 'lucide-react';
 import './App.css';
@@ -31,7 +31,8 @@ const Layout = ({ children }) => {
   }, []);
 
   const selectLanguage = (code) => {
-    // Drop the translation cookies correctly for both root domain and subdomains
+    // Save current page so we return after reload
+    sessionStorage.setItem('rannaghar_redirect_path', window.location.pathname + window.location.search);
     document.cookie = `googtrans=/en/${code}; path=/;`;
     if (window.location.hostname !== 'localhost') {
       document.cookie = `googtrans=/en/${code}; path=/; domain=${window.location.hostname}`;
@@ -100,10 +101,24 @@ const Layout = ({ children }) => {
   );
 };
 
+// Restores page position after a language-switch reload
+const RedirectRestorer = () => {
+  const navigate = useNavigate();
+  useEffect(() => {
+    const savedPath = sessionStorage.getItem('rannaghar_redirect_path');
+    if (savedPath && savedPath !== '/') {
+      sessionStorage.removeItem('rannaghar_redirect_path');
+      navigate(savedPath, { replace: true });
+    }
+  }, [navigate]);
+  return null;
+};
+
 function App() {
   return (
     <ErrorBoundary>
       <Router>
+        <RedirectRestorer />
         <Layout>
           <Routes>
             <Route path="/" element={<HomePage />} />

@@ -15,6 +15,7 @@ const Navbar = () => {
   ];
 
   const selectLanguage = (code) => {
+    sessionStorage.setItem('rannaghar_redirect_path', window.location.pathname + window.location.search);
     document.cookie = `googtrans=/en/${code}; path=/;`;
     if (window.location.hostname !== 'localhost') {
         document.cookie = `googtrans=/en/${code}; path=/; domain=${window.location.hostname}`;
