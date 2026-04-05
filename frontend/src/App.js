@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Globe2 } from 'lucide-react';
 import './App.css';
 import VideoExperience from './components/VideoExperience';
-import Blog from './components/Blog';
+import Blog, { BlogPost } from './components/Blog';
 import Gallery from './components/Gallery';
 import MenuComponent from './components/Menu';
 import Navbar from './components/Navbar';
@@ -124,6 +124,7 @@ function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/menu" element={<MenuComponent />} />
             <Route path="/blog" element={<Blog />} />
+            <Route path="/blog/:slug" element={<BlogPost />} />
             <Route path="/gallery" element={<Gallery />} />
           </Routes>
         </Layout>

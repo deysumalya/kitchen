@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
-import { BookOpen, Calendar, ArrowLeft, MessageCircle, Phone, MapPin } from 'lucide-react';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Calendar, ArrowLeft, MessageCircle, Phone, MapPin } from 'lucide-react';
 
-const SEO_BLOGS = [
+export const SEO_BLOGS = [
   {
     id: 1,
+    slug: 'wedding-reception-mistakes-kolkata',
     title: "5 Mistakes to Avoid When Planning a Wedding Reception in Kolkata",
     date: "2024-03-15",
     image: "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
@@ -32,6 +33,7 @@ const SEO_BLOGS = [
   },
   {
     id: 2,
+    slug: 'bengali-wedding-menu-pricing-kolkata',
     title: "Decoding the Perfect Bengali Biye Bari Menu (With Pricing Advice)",
     date: "2024-03-20",
     image: "https://images.unsplash.com/photo-1585937421612-70a008356fbe?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
@@ -57,6 +59,7 @@ const SEO_BLOGS = [
   },
   {
     id: 3,
+    slug: 'bhetki-paturi-howrah-caterer',
     title: "Why Bhetki Paturi is the Star of Every Howrah Celebration",
     date: "2024-04-02",
     image: "https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
@@ -77,209 +80,211 @@ const SEO_BLOGS = [
   }
 ];
 
-const Blog = () => {
-  const [activeArticle, setActiveArticle] = useState(null);
-  const [showMapModal, setShowMapModal] = useState(false);
+/* ─────────────── ZIG-ZAG BALLOON ─────────────── */
+const ZigZagBalloon = ({ onClick }) => {
+  const vw = typeof window !== 'undefined' ? window.innerWidth : 400;
+  const vh = typeof window !== 'undefined' ? window.innerHeight : 800;
+
+  // Zig-zag keyframes: start top-right, sweep to left, then right, all the way down
+  const xPoints = [vw * 0.75, vw * 0.1, vw * 0.75, vw * 0.1, vw * 0.75];
+  const yPoints = [-80, vh * 0.25, vh * 0.55, vh * 0.8, vh * 1.05];
+
+  return (
+    <motion.div
+      onClick={onClick}
+      className="fixed z-[60] cursor-pointer pointer-events-auto"
+      style={{ top: 0, left: 0 }}
+      animate={{
+        x: xPoints,
+        y: yPoints,
+        rotate: [-4, 4, -4, 4, -4],
+      }}
+      transition={{
+        duration: 18,
+        repeat: Infinity,
+        repeatType: 'reverse',
+        ease: 'easeInOut',
+      }}
+      whileHover={{ scale: 1.12 }}
+    >
+      <div className="relative bg-white text-gray-900 border-2 border-orange-500 shadow-2xl rounded-full px-5 py-3 flex items-center gap-2 font-semibold text-sm whitespace-nowrap">
+        <span className="text-2xl">🎈</span>
+        <div>
+          <span className="block text-orange-600 text-xs font-bold leading-tight">Click here to see</span>
+          <span className="block text-gray-800 font-bold leading-tight">Our Catering Service</span>
+        </div>
+        {/* string */}
+        <div className="absolute top-full left-1/2 -translate-x-1/2 w-0.5 h-5 bg-orange-400 rounded-full" />
+      </div>
+    </motion.div>
+  );
+};
+
+/* ─────────────── INDIVIDUAL BLOG POST PAGE ─────────────── */
+export const BlogPost = () => {
+  const { slug } = useParams();
   const navigate = useNavigate();
+  const [showMapModal, setShowMapModal] = useState(false);
 
-  const handleCall = () => {
-    window.location.href = 'tel:+919831924872';
-  };
+  const blog = SEO_BLOGS.find(b => b.slug === slug);
 
-  const handleWhatsApp = () => {
-    window.open('https://wa.me/919831924872', '_blank');
-  };
-
-  const handleMapLink = () => {
-    setShowMapModal(true);
-  };
-
+  const handleCall = () => { window.location.href = 'tel:+919831924872'; };
+  const handleWhatsApp = () => { window.open('https://wa.me/919831924872', '_blank'); };
   const actuallyOpenMap = () => {
     window.open('https://www.google.com/maps/search/?api=1&query=Rannaghar+Caterer+Brojonath+Lahiri+Ln+Howrah', '_blank');
     setShowMapModal(false);
   };
 
+  if (!blog) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center gap-6 p-8">
+        <h1 className="text-3xl font-bold text-gray-800">Article not found</h1>
+        <Link to="/blog" className="text-orange-600 font-bold underline">Back to Blog</Link>
+      </div>
+    );
+  }
+
   return (
-    <div className="blog-page p-6 max-w-7xl mx-auto min-h-[90vh]">
-      <AnimatePresence mode="wait">
-        {!activeArticle ? (
-          <motion.div
-            key="blog-grid"
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: 20 }}
-            transition={{ duration: 0.3 }}
-          >
-            <header className="mb-12 text-center pt-8">
-              <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-4 bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">Event Planning & Culinary Insights</h1>
-              <p className="text-gray-600 text-lg max-w-2xl mx-auto">Expert advice on planning unforgettable weddings, birthdays, and celebrations across Kolkata and Howrah.</p>
-            </header>
+    <div className="min-h-screen bg-[#fcfaf7] pb-32">
+      {/* Zig-Zag Balloon */}
+      <ZigZagBalloon onClick={() => navigate('/')} />
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {SEO_BLOGS.map((blog, index) => (
-                <motion.article
-                  key={blog.id}
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                  onClick={() => setActiveArticle(blog)}
-                  className="blog-card flex flex-col h-full overflow-hidden rounded-2xl bg-white shadow-md hover:shadow-xl transition-all duration-300 border border-gray-100 cursor-pointer group"
-                >
-                  <div className="aspect-[16/9] overflow-hidden relative">
-                     <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors z-10" />
-                    <img
-                      src={blog.image}
-                      alt={blog.title}
-                      className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
-                    />
-                  </div>
-                  <div className="p-6 flex flex-col flex-grow">
-                    <div className="flex items-center gap-2 text-sm text-orange-600 font-medium mb-3">
-                      <Calendar className="w-4 h-4" />
-                      <span>{blog.date}</span>
-                    </div>
-                    <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-orange-600 transition-colors line-clamp-2">
-                      {blog.title}
-                    </h3>
-                    <p className="text-gray-600 mb-6 line-clamp-3">
-                      {blog.excerpt}
-                    </p>
-                    <div className="mt-auto">
-                      <span className="text-orange-600 font-semibold text-sm inline-flex items-center gap-1">
-                        Read Full Article 
-                        <span className="transition-transform group-hover:translate-x-1">→</span>
-                      </span>
-                    </div>
-                  </div>
-                </motion.article>
-              ))}
-            </div>
-          </motion.div>
-        ) : (
-          <motion.div
-            key="article-view"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 20 }}
-            transition={{ duration: 0.4 }}
-            className="max-w-4xl mx-auto bg-white rounded-3xl shadow-xl overflow-hidden my-8"
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4 }}
+        className="max-w-4xl mx-auto bg-white rounded-3xl shadow-xl overflow-hidden my-8 mx-4 md:mx-auto"
+      >
+        {/* Back */}
+        <div className="p-6 pb-0">
+          <Link
+            to="/blog"
+            className="inline-flex items-center gap-2 text-gray-500 hover:text-orange-600 transition-colors font-medium px-4 py-2 rounded-full hover:bg-orange-50"
           >
-            {/* Back Button */}
-            <div className="p-6 pb-0">
-              <button 
-                onClick={() => setActiveArticle(null)}
-                className="inline-flex items-center gap-2 text-gray-500 hover:text-orange-600 transition-colors font-medium px-4 py-2 rounded-full hover:bg-orange-50"
-              >
-                <ArrowLeft size={20} />
-                Back to Articles
-              </button>
-            </div>
+            <ArrowLeft size={20} />
+            Back to Articles
+          </Link>
+        </div>
 
-            {/* Article Header */}
-            <div className="p-8 md:p-12 pb-6">
-              <div className="flex items-center gap-2 text-sm text-orange-600 font-medium mb-6">
-                <Calendar className="w-4 h-4" />
-                <span>{activeArticle.date}</span>
+        {/* Header */}
+        <div className="p-8 md:p-12 pb-6">
+          <div className="flex items-center gap-2 text-sm text-orange-600 font-bold mb-6">
+            <Calendar className="w-4 h-4" />
+            <span>{blog.date}</span>
+          </div>
+          <h1 className="text-3xl md:text-5xl font-extrabold text-gray-900 leading-tight mb-8">
+            {blog.title}
+          </h1>
+        </div>
+
+        {/* Hero Image */}
+        <div className="w-full aspect-[21/9] max-h-[420px] overflow-hidden bg-gray-100">
+          <img src={blog.image} alt={blog.title} className="w-full h-full object-cover" />
+        </div>
+
+        {/* Content */}
+        <div className="p-8 md:p-12">
+          <div
+            className="prose prose-lg prose-orange max-w-none text-gray-800
+                       prose-h2:text-2xl prose-h2:font-extrabold prose-h2:text-gray-900 prose-h2:mt-12 prose-h2:mb-6
+                       prose-h3:text-xl prose-h3:font-bold prose-h3:text-gray-800 prose-h3:mt-8 prose-h3:mb-4
+                       prose-p:leading-relaxed prose-p:mb-6 prose-p:text-gray-800
+                       prose-li:my-2 prose-ul:mb-6"
+            dangerouslySetInnerHTML={{ __html: blog.content }}
+          />
+
+          {/* CTA Block */}
+          <div className="mt-16 bg-gradient-to-br from-orange-50 to-red-50 rounded-2xl p-8 md:p-12 text-center border border-orange-100 shadow-inner mb-8">
+            <h3 className="text-2xl md:text-3xl font-extrabold text-gray-900 mb-4">Planning Your Own Event?</h3>
+            <p className="text-lg text-gray-700 font-medium mb-8 max-w-2xl mx-auto">
+              Don't risk your special day with factory caterers. Hire a passionate local team dedicated to authentic Kolkata and Howrah culinary perfection.
+            </p>
+            <div className="cta-buttons">
+              <button className="cta-btn cta-call" onClick={handleCall}><Phone size={20} /><span>Call Now</span></button>
+              <button className="cta-btn cta-whatsapp" onClick={handleWhatsApp}><MessageCircle size={20} /><span>WhatsApp</span></button>
+              <button className="cta-btn cta-map" onClick={() => setShowMapModal(true)}><MapPin size={20} /><span>Find Us on Map</span></button>
+            </div>
+          </div>
+        </div>
+      </motion.div>
+
+      {/* Map Modal */}
+      <AnimatePresence>
+        {showMapModal && (
+          <motion.div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm"
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+            <motion.div className="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl text-center border border-gray-100"
+              initial={{ scale: 0.9, y: 20 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.9, y: 20 }}>
+              <h3 className="text-2xl font-bold mb-4 text-gray-900 border-b border-gray-100 pb-4">A Quick Note Before We Go...</h3>
+              <p className="text-gray-700 mb-8 font-medium leading-relaxed">
+                We might be new to Google Maps, but our passion for authentic Bengali catering is unmatched. Please call us and give us a chance to make your event truly unforgettable!
+              </p>
+              <div className="flex flex-col gap-3">
+                <button onClick={actuallyOpenMap} className="bg-[#4285F4] hover:bg-[#3367d6] transition-colors text-white font-bold py-4 px-8 rounded-full w-full shadow-lg flex items-center justify-center gap-2">
+                  <MapPin size={20} /> Continue to Google Maps
+                </button>
+                <button onClick={() => setShowMapModal(false)} className="text-gray-500 font-medium py-3 hover:text-gray-800 transition-colors">Cancel</button>
               </div>
-              <h1 className="text-3xl md:text-5xl font-bold text-gray-900 leading-tight mb-8">
-                {activeArticle.title}
-              </h1>
-            </div>
-
-            {/* Hero Image */}
-            <div className="w-full aspect-[21/9] max-h-[500px] overflow-hidden bg-gray-100">
-               <img src={activeArticle.image} alt={activeArticle.title} className="w-full h-full object-cover" />
-            </div>
-
-            {/* Article Content */}
-            <div className="p-8 md:p-12">
-               <div 
-                 className="prose prose-lg prose-orange max-w-none text-gray-700
-                            prose-h2:text-2xl prose-h2:font-bold prose-h2:text-gray-900 prose-h2:mt-12 prose-h2:mb-6
-                            prose-h3:text-xl prose-h3:font-semibold prose-h3:text-gray-800 prose-h3:mt-8 prose-h3:mb-4
-                            prose-p:leading-relaxed prose-p:mb-6
-                            prose-li:my-2 prose-ul:mb-6"
-                 dangerouslySetInnerHTML={{ __html: activeArticle.content }} 
-               />
-               
-               {/* Floating CTA Balloon */}
-               <motion.div 
-                 onClick={() => navigate('/')}
-                 className="fixed bottom-10 right-6 sm:right-10 z-[60] cursor-pointer"
-                 animate={{ y: [0, -15, 0], rotate: [-2, 2, -2] }}
-                 transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
-                 whileHover={{ scale: 1.1 }}
-               >
-                 <div className="relative bg-white text-gray-900 border-2 border-orange-500 shadow-2xl rounded-full px-6 py-4 flex items-center gap-3 font-semibold text-sm sm:text-base whitespace-nowrap group">
-                   <div className="text-2xl floating-balloon">🎈</div>
-                   <div>
-                     <span className="block text-orange-600 mb-0.5">Click here to see</span>
-                     <span className="block">Our Catering Service</span>
-                   </div>
-                   {/* Balloon Tail */}
-                   <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 w-0 h-0 border-l-[10px] border-l-transparent border-r-[10px] border-r-transparent border-t-[14px] border-t-orange-500"></div>
-                 </div>
-               </motion.div>
-
-               {/* Extremely High Converting Call To Action for SEO reading flow */}
-               <div className="mt-16 bg-gradient-to-br from-orange-50 to-red-50 rounded-2xl p-8 md:p-12 text-center border border-orange-100 shadow-inner mb-24">
-                 <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">Planning Your Own Event?</h3>
-                 <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
-                   Don't risk your special day with factory caterers. Hire a passionate local team dedicated to authentic Kolkata and Howrah culinary perfection.
-                 </p>
-                 
-                 <div className="cta-buttons">
-                   <button className="cta-btn cta-call" onClick={handleCall}>
-                     <Phone size={20} />
-                     <span>Call Now</span>
-                   </button>
-                   <button className="cta-btn cta-whatsapp" onClick={handleWhatsApp}>
-                     <MessageCircle size={20} />
-                     <span>WhatsApp</span>
-                   </button>
-                   <button className="cta-btn cta-map" onClick={handleMapLink}>
-                     <MapPin size={20} />
-                     <span>Find Us on Map</span>
-                   </button>
-                 </div>
-               </div>
-            </div>
-            
-            {/* Embedded Underdog Map Modal specifically for the Blog route */}
-            <AnimatePresence>
-              {showMapModal && (
-                <motion.div 
-                  className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                >
-                  <motion.div 
-                    className="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl text-center border border-gray-100"
-                    initial={{ scale: 0.9, y: 20 }}
-                    animate={{ scale: 1, y: 0 }}
-                    exit={{ scale: 0.9, y: 20 }}
-                  >
-                    <h3 className="text-2xl font-bold mb-4 text-gray-900 border-b border-gray-100 pb-4">A Quick Note Before We Go...</h3>
-                    <p className="text-gray-700 mb-8 font-medium leading-relaxed">
-                      We might be new to Google Maps, but our passion for authentic Bengali catering is unmatched. Please call us and give us a chance to make your event truly unforgettable!
-                    </p>
-                    <div className="flex flex-col gap-3">
-                      <button onClick={actuallyOpenMap} className="bg-[#4285F4] hover:bg-[#3367d6] transition-colors text-white font-bold py-4 px-8 rounded-full w-full shadow-lg flex items-center justify-center gap-2">
-                         <MapPin size={20} />
-                         Continue to Google Maps
-                      </button>
-                      <button onClick={() => setShowMapModal(false)} className="text-gray-500 font-medium py-3 hover:text-gray-800 transition-colors">
-                         Cancel
-                      </button>
-                    </div>
-                  </motion.div>
-                </motion.div>
-              )}
-            </AnimatePresence>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
+    </div>
+  );
+};
+
+/* ─────────────── BLOG LIST PAGE ─────────────── */
+const Blog = () => {
+  const navigate = useNavigate();
+
+  return (
+    <div className="blog-page p-6 max-w-7xl mx-auto min-h-[90vh]">
+      <header className="mb-12 text-center pt-8">
+        <h1 className="text-4xl lg:text-5xl font-extrabold text-gray-900 mb-4 bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">
+          Event Planning & Culinary Insights
+        </h1>
+        <p className="text-gray-700 font-medium text-lg max-w-2xl mx-auto">
+          Expert advice on planning unforgettable weddings, birthdays, and celebrations across Kolkata and Howrah.
+        </p>
+      </header>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {SEO_BLOGS.map((blog, index) => (
+          <motion.article
+            key={blog.id}
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: index * 0.1 }}
+            onClick={() => navigate(`/blog/${blog.slug}`)}
+            className="blog-card flex flex-col h-full overflow-hidden rounded-2xl bg-white shadow-md hover:shadow-xl transition-all duration-300 border border-gray-100 cursor-pointer group"
+          >
+            <div className="aspect-[16/9] overflow-hidden relative">
+              <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors z-10" />
+              <img
+                src={blog.image}
+                alt={blog.title}
+                className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
+              />
+            </div>
+            <div className="p-6 flex flex-col flex-grow">
+              <div className="flex items-center gap-2 text-sm text-orange-600 font-bold mb-3">
+                <Calendar className="w-4 h-4" />
+                <span>{blog.date}</span>
+              </div>
+              <h3 className="text-xl font-extrabold text-gray-900 mb-3 group-hover:text-orange-600 transition-colors line-clamp-2">
+                {blog.title}
+              </h3>
+              <p className="text-gray-700 font-medium mb-6 line-clamp-3">{blog.excerpt}</p>
+              <div className="mt-auto">
+                <span className="text-orange-600 font-bold text-sm inline-flex items-center gap-1">
+                  Read Full Article
+                  <span className="transition-transform group-hover:translate-x-1">→</span>
+                </span>
+              </div>
+            </div>
+          </motion.article>
+        ))}
+      </div>
     </div>
   );
 };
