@@ -17,15 +17,17 @@ const FloatingDishes = () => {
   const dishes = [dish1, dish2, dish3, dish4, dish5, dish6, dish7, dish8, dish9, dish10];
   
   const elements = dishes.map((dishImg, i) => {
-    // Scatter horizontally across the whole screen since they fall behind the video
-    const left = `${Math.floor(Math.random() * 90)}%`;
-    // Stagger the initial vertical start position slightly so they don't all clump
-    const top = `-${Math.floor(Math.random() * 20 + 20)}vh`; 
+    // Confine firmly to the left and right gutters so they don't fall behind the smartphone
+    const isLeftEdge = i % 2 === 0;
+    const left = isLeftEdge ? `${Math.floor(Math.random() * 20)}%` : `${Math.floor(Math.random() * 15) + 75}%`;
     
-    // Randomize falling speed to create depth (slower = further away, faster = closer)
-    const duration = 15 + (i % 5) * 5;
+    // Stagger the initial vertical start position slightly so they don't all clump
+    const top = `-${Math.floor(Math.random() * 50 + 20)}vh`; 
+    
+    // Randomize falling speed to create depth
+    const duration = 18 + (i % 5) * 6;
     const delay = (i * 1.5);
-    const size = 100 + (i % 3) * 60;
+    const size = 120 + (i % 3) * 60;
     
     return (
       <motion.img
@@ -43,10 +45,9 @@ const FloatingDishes = () => {
           pointerEvents: 'none',
           zIndex: 0,
         }}
-        initial={{ opacity: 1, y: 0, rotate: 0 }}
+        initial={{ opacity: 1, y: 0 }}
         animate={{
-          y: '140vh', // Fall way past the bottom of the screen
-          rotate: [0, (i % 2 === 0 ? 1 : -1) * 360], // Gently spin while tumbling down
+          y: '140vh', // Fall in a perfectly straight drop past the bottom
         }}
         transition={{
           duration: duration,
