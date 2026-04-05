@@ -22,8 +22,6 @@ const FloatingDishes = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  if (!isDesktop) return null;
-
   // 30% Density: strictly limit the number of active falling elements to 6 distinct dishes
   const baseDishes = [dish1, dish2, dish3, dish4, dish5, dish6, dish7, dish8, dish9, dish10];
   const dishes = baseDishes.slice(0, 6);
@@ -72,6 +70,9 @@ const FloatingDishes = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   
+  // Wait to do the early desktop return until ALL React hooks have safely initialized
+  if (!isDesktop) return null;
+
   const elements = dishConfigs.map((config) => {
     
     // Check if clicked
