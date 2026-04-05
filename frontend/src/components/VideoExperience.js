@@ -30,33 +30,39 @@ const FloatingDishes = () => {
     });
   };
   
-  const elements = dishes.map((dishImg, i) => {
-    // Confine firmly to the left and right gutters so they don't fall behind the smartphone
-    const isLeftEdge = i % 2 === 0;
-    const left = isLeftEdge ? `${Math.floor(Math.random() * 20)}%` : `${Math.floor(Math.random() * 15) + 75}%`;
-    
-    // Stagger the initial vertical start position slightly so they don't all clump
-    const top = `-${Math.floor(Math.random() * 50 + 20)}vh`; 
-    
-    // Randomize falling speed to create depth
-    const duration = 18 + (i % 5) * 6;
-    const delay = (i * 1.5);
-    const size = 120 + (i % 3) * 60;
+  // Cache the random physics properties so they don't jump and break the exit animation when React re-renders!
+  const dishConfigs = React.useMemo(() => {
+    return dishes.map((dishImg, i) => {
+      const isLeftEdge = i % 2 === 0;
+      return {
+        dishImg,
+        id: i,
+        left: isLeftEdge ? `${Math.floor(Math.random() * 20)}%` : `${Math.floor(Math.random() * 15) + 75}%`,
+        top: `-${Math.floor(Math.random() * 50 + 20)}vh`,
+        duration: 18 + (i % 5) * 6,
+        delay: (i * 1.5),
+        size: 120 + (i % 3) * 60
+      };
+    });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  
+  const elements = dishConfigs.map((config) => {
     
     return (
-      <AnimatePresence key={i}>
-        {!clickedDishes.has(i) && (
+      <AnimatePresence key={config.id}>
+        {!clickedDishes.has(config.id) && (
           <motion.img
-            src={dishImg}
-            alt={`Delicious catering dish ${i + 1}`}
-            onClick={() => playClickSound(i)}
+            src={config.dishImg}
+            alt={`Delicious catering dish ${config.id + 1}`}
+            onClick={() => playClickSound(config.id)}
             whileHover={{ scale: 1.15 }}
             whileTap={{ scale: 0.9 }}
             style={{
               position: 'absolute',
-              top,
-              left,
-              width: `${size}px`,
+              top: config.top,
+              left: config.left,
+              width: `${config.size}px`,
               height: 'auto',
               objectFit: 'contain',
               filter: 'drop-shadow(0px 15px 25px rgba(0,0,0,0.6))',
@@ -70,8 +76,8 @@ const FloatingDishes = () => {
             }}
             exit={{ opacity: 0, scale: 0, rotate: 180 }}
             transition={{
-              duration: duration,
-              delay: delay,
+              duration: config.duration,
+              delay: config.delay,
               repeat: Infinity,
               ease: "linear" // Linear so gravity looks consistent without stopping
             }}
