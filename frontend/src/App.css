@@ -336,16 +336,13 @@ body {
   padding: 40px 20px;
 }
 
-/* Light Theme Overrides for Complete Section with White Background */
 .complete-section.light-theme {
   background: #ffffff;
   z-index: 50;
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 100vh;
-  overflow-y: auto;
+  min-height: 100vh;
+  width: 100%;
   align-items: flex-start; /* Prevent flex from clipping top content when scrolling */
+  padding-bottom: 60px; /* Buffer for mobile scrolling */
 }
 
 .complete-section.light-theme .thank-you-title {

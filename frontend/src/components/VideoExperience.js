@@ -207,7 +207,7 @@ const VideoExperience = () => {
   };
 
   return (
-    <div className="video-experience">
+    <div className={`video-experience ${videoStage === 'complete' ? '!overflow-y-auto' : ''}`}>
       {/* Floating Dish Decorations - ONLY SHOW DURING MAIN VIDEO */}
       {videoStage === 'main' && <FloatingDishes />}
 
@@ -376,7 +376,7 @@ const VideoExperience = () => {
             >
               <div className="message-card">
                 <p className="message-text">
-                  "Proudly serving exquisite culinary experiences across <strong>Kolkata and Howrah</strong>. We specialize in bringing mouth-watering catering services to birthdays, weddings, or any grand celebration."
+                  "Proudly serving exquisite culinary experiences across <strong>Kolkata and Howrah</strong> with <strong>7+ years of experience</strong>. We specialize in bringing mouth-watering catering services to birthdays, weddings, or any grand celebration."
                 </p>
                 <p className="message-signature">— Rannaghar Caterer</p>
               </div>
