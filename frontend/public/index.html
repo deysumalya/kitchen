@@ -3,8 +3,12 @@
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta name="theme-color" content="#000000" />
-        <meta name="description" content="A product of emergent.sh" />
+        <meta name="theme-color" content="#ffffff" />
+        <meta name="description" content="Discover the finest local catering in Kolkata and Howrah. From grand weddings to intimate birthday celebrations, Rannaghar Caterer delivers exquisite Bengali and multi-cuisine culinary experiences." />
+        <meta name="keywords" content="Caterer Kolkata, Caterer Howrah, Best Catering Service Kolkata, Wedding Caterer Howrah, Birthday Caterer, Best Food Catering Kolkata" />
+        <meta property="og:title" content="Rannaghar Caterer | Premium Catering Services in Kolkata & Howrah" />
+        <meta property="og:description" content="Discover the finest local catering in Kolkata and Howrah. From grand weddings to intimate birthday celebrations, Rannaghar Caterer delivers exquisite Bengali and multi-cuisine culinary experiences." />
+        <meta property="og:type" content="website" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@600&display=swap" rel="stylesheet" />
@@ -21,7 +25,37 @@
         work correctly both with client-side routing and a non-root public URL.
         Learn how to configure a non-root public URL by running `npm run build`.
         -->
-        <title>Emergent | Fullstack App</title>
+        <title>Rannaghar Caterer | Premium Catering Services in Kolkata & Howrah</title>
+        
+        <!-- Hyperlocal JSON-LD Schema for SEO -->
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "LocalBusiness",
+          "name": "Rannaghar Caterer",
+          "image": "https://rannaghar.vercel.app/logo.png",
+          "telephone": "+919831924872",
+          "url": "https://rannaghar.vercel.app",
+          "priceRange": "$$",
+          "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Kolkata and Howrah",
+            "addressRegion": "West Bengal",
+            "addressCountry": "IN"
+          },
+          "areaServed": [
+            {
+              "@type": "City",
+              "name": "Howrah"
+            },
+            {
+              "@type": "City",
+              "name": "Kolkata"
+            }
+          ],
+          "servesCuisine": ["Bengali", "Indian", "Multi-cuisine"]
+        }
+        </script>
         <script>window.addEventListener("error",function(e){if(e.error instanceof DOMException&&e.error.name==="DataCloneError"&&e.message&&e.message.includes("PerformanceServerTiming")){e.stopImmediatePropagation();e.preventDefault()}},true);</script>
         <script src="https://assets.emergent.sh/scripts/emergent-main.js"></script>
     </head>

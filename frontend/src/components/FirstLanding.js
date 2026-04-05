@@ -27,14 +27,14 @@ const FirstLanding = ({ onComplete }) => {
           <span className="badge-text">Best Recommended</span>
         </motion.div>
         
-        <motion.h1
+        <motion.h2
           className="caterer-name"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.8, delay: 0.4 }}
         >
-          Catering Service
-        </motion.h1>
+          Premium Catering in Kolkata & Howrah
+        </motion.h2>
         
         <motion.div
           className="brand-name"
@@ -42,7 +42,7 @@ const FirstLanding = ({ onComplete }) => {
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8, delay: 0.6 }}
         >
-          <h2>Rannaghar Caterer</h2>
+          <h1>Rannaghar Caterer</h1>
         </motion.div>
 
         <motion.div

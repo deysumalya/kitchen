@@ -356,7 +356,7 @@ const VideoExperience = () => {
             >
               <div className="message-card">
                 <p className="message-text">
-                  "We provide catering service for birthday, wedding or for any occasion to make the celebration more enjoyable with mouth watering food."
+                  "Proudly serving exquisite culinary experiences across <strong>Kolkata and Howrah</strong>. We specialize in bringing mouth-watering catering services to birthdays, weddings, or any grand celebration."
                 </p>
                 <p className="message-signature">— Rannaghar Caterer</p>
               </div>
