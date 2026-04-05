@@ -15,11 +15,19 @@ import dish10 from '../assets/dish10.png';
 
 const FloatingDishes = () => {
   const dishes = [dish1, dish2, dish3, dish4, dish5, dish6, dish7, dish8, dish9, dish10];
+  const [clickedDishes, setClickedDishes] = useState(new Set());
   
-  const playClickSound = () => {
+  const playClickSound = (index) => {
     const audio = new Audio('/click.mp3');
     // Rapidly play without waiting, allowing overlapping clicks
     audio.play().catch(err => console.log('Audio playback prevented:', err));
+    
+    // Add to clicked state
+    setClickedDishes(prev => {
+      const next = new Set(prev);
+      next.add(index);
+      return next;
+    });
   };
   
   const elements = dishes.map((dishImg, i) => {
@@ -36,36 +44,40 @@ const FloatingDishes = () => {
     const size = 120 + (i % 3) * 60;
     
     return (
-      <motion.img
-        key={i}
-        src={dishImg}
-        alt={`Delicious catering dish ${i + 1}`}
-        onClick={playClickSound}
-        whileHover={{ scale: 1.15 }}
-        whileTap={{ scale: 0.9 }}
-        style={{
-          position: 'absolute',
-          top,
-          left,
-          width: `${size}px`,
-          height: 'auto',
-          objectFit: 'contain',
-          filter: 'drop-shadow(0px 15px 25px rgba(0,0,0,0.6))',
-          pointerEvents: 'auto',
-          cursor: 'pointer',
-          zIndex: 5,
-        }}
-        initial={{ opacity: 1, y: 0 }}
-        animate={{
-          y: '140vh', // Fall in a perfectly straight drop past the bottom
-        }}
-        transition={{
-          duration: duration,
-          delay: delay,
-          repeat: Infinity,
-          ease: "linear" // Linear so gravity looks consistent without stopping
-        }}
-      />
+      <AnimatePresence key={i}>
+        {!clickedDishes.has(i) && (
+          <motion.img
+            src={dishImg}
+            alt={`Delicious catering dish ${i + 1}`}
+            onClick={() => playClickSound(i)}
+            whileHover={{ scale: 1.15 }}
+            whileTap={{ scale: 0.9 }}
+            style={{
+              position: 'absolute',
+              top,
+              left,
+              width: `${size}px`,
+              height: 'auto',
+              objectFit: 'contain',
+              filter: 'drop-shadow(0px 15px 25px rgba(0,0,0,0.6))',
+              pointerEvents: 'auto',
+              cursor: 'pointer',
+              zIndex: 5,
+            }}
+            initial={{ opacity: 1, y: 0 }}
+            animate={{
+              y: '140vh', // Fall in a perfectly straight drop past the bottom
+            }}
+            exit={{ opacity: 0, scale: 0, rotate: 180 }}
+            transition={{
+              duration: duration,
+              delay: delay,
+              repeat: Infinity,
+              ease: "linear" // Linear so gravity looks consistent without stopping
+            }}
+          />
+        )}
+      </AnimatePresence>
     );
   });
 
