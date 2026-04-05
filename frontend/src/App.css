@@ -326,7 +326,6 @@ body {
   transform: translateY(0) scale(1);
 }
 
-/* Complete Section */
 .complete-section {
   min-height: 100vh;
   width: 100%;
@@ -335,6 +334,37 @@ body {
   justify-content: center;
   background: linear-gradient(135deg, #1e1919 0%, #2a2424 100%);
   padding: 40px 20px;
+}
+
+/* Light Theme Overrides for Complete Section with White Background */
+.complete-section.light-theme {
+  background: #ffffff;
+  z-index: 50;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.complete-section.light-theme .thank-you-title {
+  color: var(--accent-ui-accent);
+}
+
+.complete-section.light-theme .contact-number {
+  color: var(--text-light);
+}
+
+.complete-section.light-theme .message-card {
+  background: rgba(97, 82, 90, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+}
+
+.complete-section.light-theme .message-text {
+  color: var(--text-light);
+}
+
+.complete-section.light-theme .message-signature {
+  color: var(--accent-ui-accent);
 }
 
 .complete-content {

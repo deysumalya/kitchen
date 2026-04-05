@@ -9,12 +9,10 @@ import dish4 from '../assets/dish4.png';
 import dish5 from '../assets/dish5.png';
 import dish6 from '../assets/dish6.png';
 import dish7 from '../assets/dish7.png';
-import dish8 from '../assets/dish8.png';
 import dish9 from '../assets/dish9.png';
 import dish10 from '../assets/dish10.png';
-import logoSrc from '../assets/logo.png';
 
-const FloatingDishes = ({ videoStage }) => {
+const FloatingDishes = () => {
   const baseDishes = [dish1, dish2, dish3, dish4, dish5, dish6, dish7, dish8, dish9, dish10];
   // Reduce to 20 dishes so it looks balanced without obvious duplicates right next to each other
   const dishes = [...baseDishes, ...baseDishes];
@@ -68,56 +66,45 @@ const FloatingDishes = ({ videoStage }) => {
     // Check if clicked
     const isClicked = clickedDishes.has(config.id);
 
-    // Filter out ~70% of dishes to reduce clutter during the main video or end screen
-    const isClutterReducedPhase = videoStage === 'main' || videoStage === 'complete';
-    const isFilteredOut = isClutterReducedPhase && (config.id % 3 !== 0);
-
-    // Transform the remaining 30% into the brand logo at the very end
-    const currentImgSrc = (videoStage === 'complete' && !isFilteredOut) ? logoSrc : config.dishImg;
-
-    // Handle what physics it should have right now
-    let currentAnimate;
-    let currentTransition;
-    let currentPointerEvents = 'auto';
-
-    if (isClicked || isFilteredOut) {
-      // Disappear either because user popped it, or because the main video started and we're dropping 70%
-      currentAnimate = { scale: isClicked ? 0 : 1, opacity: 0, rotate: isClicked ? 180 : 0 };
-      currentTransition = { duration: isClicked ? 0.4 : 1.5, ease: "easeOut" };
-      currentPointerEvents = 'none';
-    } else {
-      // Keep falling endlessly
-      currentAnimate = { y: '150vh' };
-      currentTransition = { duration: config.duration, delay: config.delay, repeat: Infinity, ease: "linear" };
-    }
-
     return (
       <motion.img
         key={config.id}
-        src={currentImgSrc}
+        src={config.dishImg}
         alt={`Falling decoration ${config.id + 1}`}
         onClick={() => playClickSound(config.id)}
-        whileHover={(!isClicked && !isFilteredOut) ? { scale: 1.15 } : {}}
-        whileTap={(!isClicked && !isFilteredOut) ? { scale: 0.9 } : {}}
+        whileHover={!isClicked ? { scale: 1.15 } : {}}
+        whileTap={!isClicked ? { scale: 0.9 } : {}}
         style={{
           position: 'absolute',
           top: config.top,
           left: config.left,
-          // Make logo slightly wider if necessary to fit its aspect ratio
-          width: videoStage === 'complete' ? `${config.size * 1.5}px` : `${config.size}px`,
+          width: `${config.size}px`,
           height: 'auto',
           objectFit: 'contain',
           // Optimize filter to be much lighter on the GPU to stop the video from stuttering
-          filter: videoStage === 'complete' ? 'drop-shadow(0px 5px 8px rgba(0,0,0,0.3))' : 'drop-shadow(0px 8px 12px rgba(0,0,0,0.4))',
-          pointerEvents: currentPointerEvents,
-          cursor: currentPointerEvents === 'none' ? 'default' : 'pointer',
+          filter: 'drop-shadow(0px 8px 12px rgba(0,0,0,0.4))',
+          pointerEvents: isClicked ? 'none' : 'auto',
+          cursor: isClicked ? 'default' : 'pointer',
           zIndex: 5,
           // Force Hardware Acceleration so the browser GPU renders the physics smoothly instead of the CPU
           willChange: 'transform, opacity',
         }}
         initial={{ opacity: 1, y: 0 }}
-        animate={currentAnimate}
-        transition={currentTransition}
+        animate={
+          isClicked 
+            ? { scale: 0, opacity: 0, rotate: 180 } 
+            : { y: '150vh' } // Fall deep past screen bottom
+        }
+        transition={
+          isClicked
+            ? { duration: 0.4, ease: "easeOut" } // Fast suck-in pop animation
+            : {
+                duration: config.duration,
+                delay: config.delay,
+                repeat: Infinity,
+                ease: "linear"
+              }
+        }
       />
     );
   });
@@ -201,8 +188,8 @@ const VideoExperience = () => {
 
   return (
     <div className="video-experience">
-      {/* Floating Dish Decorations */}
-      <FloatingDishes videoStage={videoStage} />
+      {/* Floating Dish Decorations - ONLY SHOW DURING MAIN VIDEO */}
+      {videoStage === 'main' && <FloatingDishes />}
 
       {/* Welcome Video Section */}
       {(videoStage === 'welcome' || videoStage === 'waiting') && (
@@ -297,12 +284,29 @@ const VideoExperience = () => {
       {/* Complete Section - CTAs and Message */}
       {videoStage === 'complete' && (
         <motion.div
-          className="complete-section"
+          className="complete-section light-theme"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.6 }}
         >
           <div className="complete-content">
+            
+            {/* The Brand Logo Animation Video plays with sound! */}
+            <motion.div 
+              style={{ width: '100%', maxWidth: '500px', margin: '0 auto 40px', borderRadius: '15px', overflow: 'hidden', boxShadow: '0 10px 40px rgba(0,0,0,0.1)' }}
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ delay: 0.1, duration: 0.6 }}
+            >
+              <video 
+                src="/logo_animation.mp4" 
+                autoPlay 
+                playsInline 
+                controlsList="nodownload"
+                style={{ width: '100%', display: 'block' }}
+              />
+            </motion.div>
+
             <motion.h2
               className="thank-you-title"
               initial={{ y: 20, opacity: 0 }}
