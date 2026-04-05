@@ -15,8 +15,8 @@ import dish10 from '../assets/dish10.png';
 
 const FloatingDishes = () => {
   const baseDishes = [dish1, dish2, dish3, dish4, dish5, dish6, dish7, dish8, dish9, dish10];
-  // Multiply the dishes array to spawn 40 total dishes in the rain sequence to make it look dense and plentiful
-  const dishes = [...baseDishes, ...baseDishes, ...baseDishes, ...baseDishes];
+  // Reduce to 20 dishes so it looks balanced without obvious duplicates right next to each other
+  const dishes = [...baseDishes, ...baseDishes];
   
   const [clickedDishes, setClickedDishes] = useState(new Set());
   
@@ -81,10 +81,13 @@ const FloatingDishes = () => {
           width: `${config.size}px`,
           height: 'auto',
           objectFit: 'contain',
-          filter: 'drop-shadow(0px 15px 25px rgba(0,0,0,0.6))',
+          // Optimize filter to be much lighter on the GPU to stop the video from stuttering
+          filter: 'drop-shadow(0px 8px 12px rgba(0,0,0,0.4))',
           pointerEvents: isClicked ? 'none' : 'auto',
           cursor: isClicked ? 'default' : 'pointer',
           zIndex: 5,
+          // Force Hardware Acceleration so the browser GPU renders the physics smoothly instead of the CPU
+          willChange: 'transform, opacity',
         }}
         initial={{ opacity: 1, y: 0 }}
         // Conditionally hijack the animation if clicked
