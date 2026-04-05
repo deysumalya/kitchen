@@ -2,6 +2,69 @@ import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Phone, MessageCircle, ArrowRight } from 'lucide-react';
 
+import dish1 from '../assets/dish1.png';
+import dish2 from '../assets/dish2.png';
+import dish3 from '../assets/dish3.png';
+import dish4 from '../assets/dish4.png';
+import dish5 from '../assets/dish5.png';
+import dish6 from '../assets/dish6.png';
+import dish7 from '../assets/dish7.png';
+import dish8 from '../assets/dish8.png';
+import dish9 from '../assets/dish9.png';
+import dish10 from '../assets/dish10.png';
+
+const FloatingDishes = () => {
+  const dishes = [dish1, dish2, dish3, dish4, dish5, dish6, dish7, dish8, dish9, dish10];
+  
+  const elements = dishes.map((dishImg, i) => {
+    // Generate scattered positions ensuring they stay mostly on the outer edge
+    const isLeftEdge = i % 2 === 0;
+    const top = `${Math.floor(Math.random() * 80) + 10}%`;
+    const left = isLeftEdge ? `${Math.floor(Math.random() * 20)}%` : `${Math.floor(Math.random() * 20) + 75}%`;
+    
+    const delay = (i * 2);
+    const duration = 25 + (i % 5) * 5;
+    const size = 120 + (i % 3) * 40;
+    
+    return (
+      <motion.img
+        key={i}
+        src={dishImg}
+        alt={`Delicious catering dish ${i + 1}`}
+        style={{
+          position: 'absolute',
+          top,
+          left,
+          width: `${size}px`,
+          height: 'auto',
+          objectFit: 'contain',
+          filter: 'drop-shadow(0px 10px 15px rgba(0,0,0,0.5))',
+          pointerEvents: 'none',
+          zIndex: 0,
+        }}
+        initial={{ opacity: 0, y: 50, rotate: 0 }}
+        animate={{
+          opacity: [0, 0.8, 0.6, 0.8, 0],
+          y: [0, -40, 20, -10, 0],
+          rotate: [0, 10, -5, 5, 0],
+        }}
+        transition={{
+          duration: duration,
+          delay: delay,
+          repeat: Infinity,
+          ease: "easeInOut"
+        }}
+      />
+    );
+  });
+
+  return (
+    <div className="floating-background-container" style={{ zIndex: 0 }}>
+      {elements}
+    </div>
+  );
+};
+
 const VideoExperience = () => {
   const [videoStage, setVideoStage] = useState('welcome'); // 'welcome', 'waiting', 'main', 'complete'
   const [showClickHere, setShowClickHere] = useState(false);
@@ -74,6 +137,9 @@ const VideoExperience = () => {
 
   return (
     <div className="video-experience">
+      {/* Floating Dish Decorations */}
+      <FloatingDishes />
+
       {/* Welcome Video Section */}
       {(videoStage === 'welcome' || videoStage === 'waiting') && (
         <>
