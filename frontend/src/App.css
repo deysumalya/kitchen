@@ -565,3 +565,27 @@ body {
     padding: 10px 24px;
   }
 }
+
+/* 
+ * CRITICAL: Google Translate Interface Masking
+ * These rules violently suppress the ugly white top banner that Google injects when activated. 
+ */
+.goog-te-banner-frame.skiptranslate {
+  display: none !important;
+}
+
+body {
+  top: 0px !important;
+}
+
+.goog-logo-link {
+  display: none !important;
+}
+
+.goog-te-gadget {
+  color: transparent !important;
+}
+
+#goog-gt-tt {
+  display: none !important;
+}

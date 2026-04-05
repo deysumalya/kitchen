@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { BookOpen, Calendar, ArrowLeft, MessageCircle } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { BookOpen, Calendar, ArrowLeft, MessageCircle, Phone, MapPin } from 'lucide-react';
 
 const SEO_BLOGS = [
   {
@@ -78,9 +79,24 @@ const SEO_BLOGS = [
 
 const Blog = () => {
   const [activeArticle, setActiveArticle] = useState(null);
+  const [showMapModal, setShowMapModal] = useState(false);
+  const navigate = useNavigate();
+
+  const handleCall = () => {
+    window.location.href = 'tel:+919831924872';
+  };
 
   const handleWhatsApp = () => {
     window.open('https://wa.me/919831924872', '_blank');
+  };
+
+  const handleMapLink = () => {
+    setShowMapModal(true);
+  };
+
+  const actuallyOpenMap = () => {
+    window.open('https://www.google.com/maps/search/?api=1&query=Rannaghar+Caterer+Brojonath+Lahiri+Ln+Howrah', '_blank');
+    setShowMapModal(false);
   };
 
   return (
@@ -186,21 +202,81 @@ const Blog = () => {
                  dangerouslySetInnerHTML={{ __html: activeArticle.content }} 
                />
                
+               {/* Floating CTA Balloon */}
+               <motion.div 
+                 onClick={() => navigate('/')}
+                 className="fixed bottom-10 right-6 sm:right-10 z-[60] cursor-pointer"
+                 animate={{ y: [0, -15, 0], rotate: [-2, 2, -2] }}
+                 transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
+                 whileHover={{ scale: 1.1 }}
+               >
+                 <div className="relative bg-white text-gray-900 border-2 border-orange-500 shadow-2xl rounded-full px-6 py-4 flex items-center gap-3 font-semibold text-sm sm:text-base whitespace-nowrap group">
+                   <div className="text-2xl floating-balloon">🎈</div>
+                   <div>
+                     <span className="block text-orange-600 mb-0.5">Click here to see</span>
+                     <span className="block">Our Catering Service</span>
+                   </div>
+                   {/* Balloon Tail */}
+                   <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 w-0 h-0 border-l-[10px] border-l-transparent border-r-[10px] border-r-transparent border-t-[14px] border-t-orange-500"></div>
+                 </div>
+               </motion.div>
+
                {/* Extremely High Converting Call To Action for SEO reading flow */}
-               <div className="mt-16 bg-gradient-to-br from-orange-50 to-red-50 rounded-2xl p-8 md:p-12 text-center border border-orange-100 shadow-inner">
+               <div className="mt-16 bg-gradient-to-br from-orange-50 to-red-50 rounded-2xl p-8 md:p-12 text-center border border-orange-100 shadow-inner mb-24">
                  <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">Planning Your Own Event?</h3>
                  <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
                    Don't risk your special day with factory caterers. Hire a passionate local team dedicated to authentic Kolkata and Howrah culinary perfection.
                  </p>
-                 <button 
-                   onClick={handleWhatsApp}
-                   className="inline-flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#20bd5a] text-white text-lg font-bold py-4 px-8 rounded-full shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 w-full sm:w-auto"
-                 >
-                   <MessageCircle size={24} />
-                   WhatsApp Rannaghar Caterer
-                 </button>
+                 
+                 <div className="cta-buttons">
+                   <button className="cta-btn cta-call" onClick={handleCall}>
+                     <Phone size={20} />
+                     <span>Call Now</span>
+                   </button>
+                   <button className="cta-btn cta-whatsapp" onClick={handleWhatsApp}>
+                     <MessageCircle size={20} />
+                     <span>WhatsApp</span>
+                   </button>
+                   <button className="cta-btn cta-map" onClick={handleMapLink}>
+                     <MapPin size={20} />
+                     <span>Find Us on Map</span>
+                   </button>
+                 </div>
                </div>
             </div>
+            
+            {/* Embedded Underdog Map Modal specifically for the Blog route */}
+            <AnimatePresence>
+              {showMapModal && (
+                <motion.div 
+                  className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                >
+                  <motion.div 
+                    className="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl text-center border border-gray-100"
+                    initial={{ scale: 0.9, y: 20 }}
+                    animate={{ scale: 1, y: 0 }}
+                    exit={{ scale: 0.9, y: 20 }}
+                  >
+                    <h3 className="text-2xl font-bold mb-4 text-gray-900 border-b border-gray-100 pb-4">A Quick Note Before We Go...</h3>
+                    <p className="text-gray-700 mb-8 font-medium leading-relaxed">
+                      We might be new to Google Maps, but our passion for authentic Bengali catering is unmatched. Please call us and give us a chance to make your event truly unforgettable!
+                    </p>
+                    <div className="flex flex-col gap-3">
+                      <button onClick={actuallyOpenMap} className="bg-[#4285F4] hover:bg-[#3367d6] transition-colors text-white font-bold py-4 px-8 rounded-full w-full shadow-lg flex items-center justify-center gap-2">
+                         <MapPin size={20} />
+                         Continue to Google Maps
+                      </button>
+                      <button onClick={() => setShowMapModal(false)} className="text-gray-500 font-medium py-3 hover:text-gray-800 transition-colors">
+                         Cancel
+                      </button>
+                    </div>
+                  </motion.div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </motion.div>
         )}
       </AnimatePresence>
