@@ -10,6 +10,22 @@ import MenuComponent from './components/Menu';
 import Navbar from './components/Navbar';
 import ErrorBoundary from './components/ErrorBoundary';
 
+const GA_ID = 'G-J5Q52RQFGR';
+
+// Fires a GA4 page_view event on every React Router navigation
+const RouteTracker = () => {
+  const location = useLocation();
+  useEffect(() => {
+    if (typeof window.gtag === 'function') {
+      window.gtag('config', GA_ID, {
+        page_path: location.pathname + location.search,
+        page_title: document.title,
+      });
+    }
+  }, [location]);
+  return null;
+};
+
 const HomePage = () => {
   return (
     <VideoExperience />
@@ -118,6 +134,7 @@ function App() {
   return (
     <ErrorBoundary>
       <Router>
+        <RouteTracker />
         <RedirectRestorer />
         <Layout>
           <Routes>
