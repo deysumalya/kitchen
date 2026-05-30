@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+  <!-- Homepage -->
+  <url>
+    <loc>https://rannagharcaterers.in/</loc>
+    <lastmod>2025-05-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  <!-- Menu Page -->
+  <url>
+    <loc>https://rannagharcaterers.in/menu</loc>
+    <lastmod>2025-05-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- Gallery Page -->
+  <url>
+    <loc>https://rannagharcaterers.in/gallery</loc>
+    <lastmod>2025-05-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Blog List Page -->
+  <url>
+    <loc>https://rannagharcaterers.in/blog</loc>
+    <lastmod>2025-05-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Blog Post: Wedding Reception Mistakes -->
+  <url>
+    <loc>https://rannagharcaterers.in/blog/wedding-reception-mistakes-kolkata</loc>
+    <lastmod>2024-03-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Blog Post: Bengali Wedding Menu Pricing -->
+  <url>
+    <loc>https://rannagharcaterers.in/blog/bengali-wedding-menu-pricing-kolkata</loc>
+    <lastmod>2024-03-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Blog Post: Bhetki Paturi Howrah -->
+  <url>
+    <loc>https://rannagharcaterers.in/blog/bhetki-paturi-howrah-caterer</loc>
+    <lastmod>2024-04-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+</urlset>
