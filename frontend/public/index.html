@@ -71,66 +71,9 @@
         }
         </script>
         <script>window.addEventListener("error",function(e){if(e.error instanceof DOMException&&e.error.name==="DataCloneError"&&e.message&&e.message.includes("PerformanceServerTiming")){e.stopImmediatePropagation();e.preventDefault()}},true);</script>
-
-        <style>
-            /* Ultimate Google Translate Mute */
-            iframe.goog-te-banner-frame,
-            .goog-te-banner-frame,
-            .goog-te-balloon-frame,
-            #goog-gt-tt,
-            .skiptranslate > iframe,
-            .VIpgJd-ZVi9od-ORHb-OEVmcd,
-            .VIpgJd-ZVi9od-aZ2wEe-wLgVI {
-                display: none !important;
-                visibility: hidden !important;
-                opacity: 0 !important;
-                height: 0 !important;
-                width: 0 !important;
-            }
-            body, html {
-                top: 0px !important;
-                margin-top: 0px !important;
-                position: static !important;
-            }
-            .goog-text-highlight {
-                background-color: transparent !important;
-                box-shadow: none !important;
-            }
-        </style>
-        <script>
-            // Sweeper to actively destroy Google Translate DOM injections
-            setInterval(function() {
-                if(document.body) {
-                    document.body.style.setProperty('top', '0px', 'important');
-                    document.body.style.setProperty('position', 'static', 'important');
-                    document.body.style.setProperty('min-height', 'auto', 'important');
-                }
-                if(document.documentElement) {
-                    document.documentElement.style.setProperty('top', '0px', 'important');
-                }
-                var banners = document.querySelectorAll('.goog-te-banner-frame, iframe.skiptranslate');
-                for (var i = 0; i < banners.length; i++) {
-                    banners[i].style.setProperty('display', 'none', 'important');
-                }
-            }, 50);
-        </script>
     </head>
     <body>
         <noscript>You need to enable JavaScript to run this app.</noscript>
-        
-        <!-- Hidden Google Translate Element -->
-        <div id="google_translate_element" style="display:none;"></div>
-        <script type="text/javascript">
-          function googleTranslateElementInit() {
-            new google.translate.TranslateElement({
-              pageLanguage: 'en',
-              includedLanguages: 'en,bn,hi',
-              autoDisplay: false
-            }, 'google_translate_element');
-          }
-        </script>
-        <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
-
         <div id="root"></div>
         <!--
       This HTML file is a template.
