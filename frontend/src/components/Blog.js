@@ -254,20 +254,93 @@ const ZigZagBalloon = ({ onClick }) => {
 };
 
 /* ─────────────── INDIVIDUAL BLOG POST PAGE ─────────────── */
-export const BlogPost = () => {
+export const BlogPost = ({ lang }) => {
   const { slug } = useParams();
   const navigate = useNavigate();
-  const [lang, setLang] = useBlogLang();
   const [showMapModal, setShowMapModal] = useState(false);
 
   const blog = SEO_BLOGS.find(b => b.slug === slug);
   const t = blog?.translations[lang] || blog?.translations['en'];
+
+  // Save current language preference in localStorage
+  useEffect(() => {
+    localStorage.setItem('rannaghar_blog_lang', lang);
+  }, [lang]);
+
+  // Inject SEO metadata dynamically for crawlers
+  useEffect(() => {
+    if (!blog || !t) return;
+
+    const originalTitle = document.title;
+    document.title = `${t.title} | Rannaghar Caterer`;
+
+    let metaDesc = document.querySelector('meta[name="description"]');
+    let originalDesc = metaDesc ? metaDesc.getAttribute('content') : '';
+    if (!metaDesc) {
+      metaDesc = document.createElement('meta');
+      metaDesc.setAttribute('name', 'description');
+      document.head.appendChild(metaDesc);
+    }
+    metaDesc.setAttribute('content', t.excerpt);
+
+    let canonicalLink = document.querySelector('link[rel="canonical"]');
+    let originalCanonical = canonicalLink ? canonicalLink.getAttribute('href') : '';
+    if (!canonicalLink) {
+      canonicalLink = document.createElement('link');
+      canonicalLink.setAttribute('rel', 'canonical');
+      document.head.appendChild(canonicalLink);
+    }
+    canonicalLink.setAttribute('href', `https://rannagharcaterers.in/blog/${lang}/${slug}`);
+
+    const existingHreflangs = document.querySelectorAll('link[rel="alternate"][hreflang]');
+    existingHreflangs.forEach(el => el.remove());
+
+    const hreflangEls = [];
+    LANGUAGES.forEach(l => {
+      const link = document.createElement('link');
+      link.setAttribute('rel', 'alternate');
+      link.setAttribute('hreflang', l.code);
+      link.setAttribute('href', `https://rannagharcaterers.in/blog/${l.code}/${slug}`);
+      document.head.appendChild(link);
+      hreflangEls.push(link);
+    });
+
+    const defaultLink = document.createElement('link');
+    defaultLink.setAttribute('rel', 'alternate');
+    defaultLink.setAttribute('hreflang', 'x-default');
+    defaultLink.setAttribute('href', `https://rannagharcaterers.in/blog/en/${slug}`);
+    document.head.appendChild(defaultLink);
+    hreflangEls.push(defaultLink);
+
+    return () => {
+      document.title = originalTitle;
+      if (metaDesc) {
+        if (originalDesc) {
+          metaDesc.setAttribute('content', originalDesc);
+        } else {
+          metaDesc.remove();
+        }
+      }
+      if (canonicalLink) {
+        if (originalCanonical) {
+          canonicalLink.setAttribute('href', originalCanonical);
+        } else {
+          canonicalLink.remove();
+        }
+      }
+      hreflangEls.forEach(el => el.remove());
+    };
+  }, [lang, slug, blog, t]);
 
   const handleCall = () => { window.location.href = 'tel:+919831924872'; };
   const handleWhatsApp = () => { window.open('https://wa.me/919831924872', '_blank'); };
   const actuallyOpenMap = () => {
     window.open('https://www.google.com/maps/search/?api=1&query=Rannaghar+Caterer+Brojonath+Lahiri+Ln+Howrah', '_blank');
     setShowMapModal(false);
+  };
+
+  const handleLangChange = (newLang) => {
+    navigate(`/blog/${newLang}/${slug}`);
   };
 
   const ctaLabels = {
@@ -281,7 +354,7 @@ export const BlogPost = () => {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center gap-6 p-8">
         <h1 className="text-3xl font-bold text-gray-800">Article not found</h1>
-        <Link to="/blog" className="text-orange-600 font-bold underline">Back to Blog</Link>
+        <Link to={`/blog/${lang}`} className="text-orange-600 font-bold underline">Back to Blog</Link>
       </div>
     );
   }
@@ -296,14 +369,14 @@ export const BlogPost = () => {
       >
         {/* Back */}
         <div className="p-6 pb-0">
-          <Link to="/blog" className="inline-flex items-center gap-2 text-gray-500 hover:text-orange-600 transition-colors font-medium px-4 py-2 rounded-full hover:bg-orange-50">
+          <Link to={`/blog/${lang}`} className="inline-flex items-center gap-2 text-gray-500 hover:text-orange-600 transition-colors font-medium px-4 py-2 rounded-full hover:bg-orange-50">
             <ArrowLeft size={20} /> Back to Articles
           </Link>
         </div>
 
         <div className="p-8 md:p-12 pb-4">
           {/* Language Tabs */}
-          <LangTabs lang={lang} setLang={setLang} />
+          <LangTabs lang={lang} setLang={handleLangChange} />
 
           <div className="flex items-center gap-2 text-sm text-orange-600 font-bold mb-6">
             <Calendar className="w-4 h-4" /><span>{blog.date}</span>
@@ -369,9 +442,8 @@ export const BlogPost = () => {
 };
 
 /* ─────────────── BLOG LIST PAGE ─────────────── */
-const Blog = () => {
+const Blog = ({ lang }) => {
   const navigate = useNavigate();
-  const [lang, setLang] = useBlogLang();
 
   const headings = {
     en: { title: 'Event Planning & Culinary Insights', sub: 'Expert advice on planning unforgettable weddings, birthdays, and celebrations across Kolkata and Howrah.' },
@@ -380,6 +452,78 @@ const Blog = () => {
   };
   const h = headings[lang] || headings['en'];
 
+  // Save current language preference in localStorage
+  useEffect(() => {
+    localStorage.setItem('rannaghar_blog_lang', lang);
+  }, [lang]);
+
+  // Inject SEO metadata dynamically for crawlers
+  useEffect(() => {
+    const originalTitle = document.title;
+    document.title = `${h.title} | Rannaghar Caterer`;
+
+    let metaDesc = document.querySelector('meta[name="description"]');
+    let originalDesc = metaDesc ? metaDesc.getAttribute('content') : '';
+    if (!metaDesc) {
+      metaDesc = document.createElement('meta');
+      metaDesc.setAttribute('name', 'description');
+      document.head.appendChild(metaDesc);
+    }
+    metaDesc.setAttribute('content', h.sub);
+
+    let canonicalLink = document.querySelector('link[rel="canonical"]');
+    let originalCanonical = canonicalLink ? canonicalLink.getAttribute('href') : '';
+    if (!canonicalLink) {
+      canonicalLink = document.createElement('link');
+      canonicalLink.setAttribute('rel', 'canonical');
+      document.head.appendChild(canonicalLink);
+    }
+    canonicalLink.setAttribute('href', `https://rannagharcaterers.in/blog/${lang}`);
+
+    const existingHreflangs = document.querySelectorAll('link[rel="alternate"][hreflang]');
+    existingHreflangs.forEach(el => el.remove());
+
+    const hreflangEls = [];
+    LANGUAGES.forEach(l => {
+      const link = document.createElement('link');
+      link.setAttribute('rel', 'alternate');
+      link.setAttribute('hreflang', l.code);
+      link.setAttribute('href', `https://rannagharcaterers.in/blog/${l.code}`);
+      document.head.appendChild(link);
+      hreflangEls.push(link);
+    });
+
+    const defaultLink = document.createElement('link');
+    defaultLink.setAttribute('rel', 'alternate');
+    defaultLink.setAttribute('hreflang', 'x-default');
+    defaultLink.setAttribute('href', `https://rannagharcaterers.in/blog/en`);
+    document.head.appendChild(defaultLink);
+    hreflangEls.push(defaultLink);
+
+    return () => {
+      document.title = originalTitle;
+      if (metaDesc) {
+        if (originalDesc) {
+          metaDesc.setAttribute('content', originalDesc);
+        } else {
+          metaDesc.remove();
+        }
+      }
+      if (canonicalLink) {
+        if (originalCanonical) {
+          canonicalLink.setAttribute('href', originalCanonical);
+        } else {
+          canonicalLink.remove();
+        }
+      }
+      hreflangEls.forEach(el => el.remove());
+    };
+  }, [lang, h]);
+
+  const handleLangChange = (newLang) => {
+    navigate(`/blog/${newLang}`);
+  };
+
   return (
     <div className="blog-page p-6 max-w-7xl mx-auto min-h-[90vh]">
       <header className="mb-8 text-center pt-8">
@@ -387,7 +531,7 @@ const Blog = () => {
           {h.title}
         </h1>
         <p className="text-gray-700 font-medium text-lg max-w-2xl mx-auto mb-8">{h.sub}</p>
-        <LangTabs lang={lang} setLang={setLang} />
+        <LangTabs lang={lang} setLang={handleLangChange} />
       </header>
 
       <AnimatePresence mode="wait">
@@ -403,7 +547,7 @@ const Blog = () => {
               <motion.article
                 key={blog.id}
                 initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.08 }}
-                onClick={() => navigate(`/blog/${blog.slug}`)}
+                onClick={() => navigate(`/blog/${lang}/${blog.slug}`)}
                 className="blog-card flex flex-col h-full overflow-hidden rounded-2xl bg-white shadow-md hover:shadow-xl transition-all duration-300 border border-gray-100 cursor-pointer group"
               >
                 <div className="aspect-[16/9] overflow-hidden relative">

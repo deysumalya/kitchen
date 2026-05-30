@@ -26,15 +26,36 @@ const Navbar = () => {
     localStorage.setItem('rannaghar_blog_lang', code);
     setLangMenuOpen(false);
     setIsOpen(false);
-    // If already on a blog page, force a soft re-render by navigating
+
     if (location.pathname.startsWith('/blog')) {
-      navigate(location.pathname, { replace: true });
+      const parts = location.pathname.split('/').filter(Boolean); // e.g. ["blog", "en", "slug"] or ["blog", "en"]
+      if (parts.length === 3) {
+        // Individual blog post page: /blog/:lang/:slug
+        const slug = parts[2];
+        navigate(`/blog/${code}/${slug}`);
+      } else if (parts.length === 2 && ['en', 'bn', 'hi'].includes(parts[1])) {
+        // Blog list page: /blog/:lang
+        navigate(`/blog/${code}`);
+      } else {
+        navigate(`/blog/${code}`);
+      }
     } else {
-      navigate('/blog');
+      navigate(`/blog/${code}`);
     }
   };
 
-  const currentLang = localStorage.getItem('rannaghar_blog_lang') || 'en';
+  // Determine current language from URL if on blog, else local storage
+  let currentLang = 'en';
+  if (location.pathname.startsWith('/blog')) {
+    const parts = location.pathname.split('/').filter(Boolean);
+    if (parts.length >= 2 && ['en', 'bn', 'hi'].includes(parts[1])) {
+      currentLang = parts[1];
+    } else {
+      currentLang = localStorage.getItem('rannaghar_blog_lang') || 'en';
+    }
+  } else {
+    currentLang = localStorage.getItem('rannaghar_blog_lang') || 'en';
+  }
 
   return (
     <nav className="bg-white/90 backdrop-blur-md sticky top-0 z-50 border-b border-gray-200 shadow-sm relative">

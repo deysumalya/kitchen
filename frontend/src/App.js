@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation, Navigate, useParams } from 'react-router-dom';
 import './App.css';
 import VideoExperience from './components/VideoExperience';
 import Blog, { BlogPost } from './components/Blog';
@@ -24,6 +24,19 @@ const RouteTracker = () => {
   return null;
 };
 
+// Redirects `/blog` to the user's preferred language listing page (defaults to English)
+const BlogRedirect = () => {
+  const savedLang = localStorage.getItem('rannaghar_blog_lang') || 'en';
+  return <Navigate to={`/blog/${savedLang}`} replace />;
+};
+
+// Redirects legacy `/blog/:slug` links to `/blog/:lang/:slug` (defaults to English)
+const BlogPostLegacyRedirect = () => {
+  const { slug } = useParams();
+  const savedLang = localStorage.getItem('rannaghar_blog_lang') || 'en';
+  return <Navigate to={`/blog/${savedLang}/${slug}`} replace />;
+};
+
 const HomePage = () => <VideoExperience />;
 
 const Layout = ({ children }) => {
@@ -46,8 +59,21 @@ function App() {
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/menu" element={<MenuComponent />} />
-            <Route path="/blog" element={<Blog />} />
-            <Route path="/blog/:slug" element={<BlogPost />} />
+            
+            {/* Blog Listings per Language */}
+            <Route path="/blog/en" element={<Blog lang="en" />} />
+            <Route path="/blog/bn" element={<Blog lang="bn" />} />
+            <Route path="/blog/hi" element={<Blog lang="hi" />} />
+            
+            {/* Blog Post Details per Language */}
+            <Route path="/blog/en/:slug" element={<BlogPost lang="en" />} />
+            <Route path="/blog/bn/:slug" element={<BlogPost lang="bn" />} />
+            <Route path="/blog/hi/:slug" element={<BlogPost lang="hi" />} />
+            
+            {/* Redirects */}
+            <Route path="/blog" element={<BlogRedirect />} />
+            <Route path="/blog/:slug" element={<BlogPostLegacyRedirect />} />
+            
             <Route path="/gallery" element={<Gallery />} />
           </Routes>
         </Layout>
