@@ -142,6 +142,7 @@ const ZigZagBalloon = ({ onClick }) => {
   );
 };
 
+// Trigger redeployment
 const VideoExperience = () => {
   const [videoStage, setVideoStage] = useState('complete'); // 'main', 'complete'
   const [showMapModal, setShowMapModal] = useState(false);
