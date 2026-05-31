@@ -276,6 +276,15 @@ const VideoExperience = () => {
               Let's Make Your Event Memorable
             </motion.h2>
 
+            <motion.h3
+              className="text-lg md:text-xl text-gray-600 text-center font-semibold mb-8 -mt-4 px-4"
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.3 }}
+            >
+              Premium Catering Services for Howrah and Kolkata
+            </motion.h3>
+
             <motion.div
               className="cta-buttons"
               initial={{ y: 20, opacity: 0 }}
