@@ -114,56 +114,44 @@ const FloatingDishes = () => {
   );
 };
 
+const ZigZagBalloon = ({ onClick }) => {
+  const vw = typeof window !== 'undefined' ? window.innerWidth : 400;
+  const vh = typeof window !== 'undefined' ? window.innerHeight : 800;
+  return (
+    <motion.div
+      onClick={onClick}
+      className="fixed z-[60] cursor-pointer pointer-events-auto"
+      style={{ top: 0, left: 0 }}
+      animate={{
+        x: [vw * 0.75, vw * 0.1, vw * 0.75, vw * 0.1, vw * 0.75],
+        y: [-80, vh * 0.25, vh * 0.55, vh * 0.8, vh * 1.05],
+        rotate: [-4, 4, -4, 4, -4],
+      }}
+      transition={{ duration: 18, repeat: Infinity, repeatType: 'reverse', ease: 'easeInOut' }}
+      whileHover={{ scale: 1.12 }}
+    >
+      <div className="relative bg-white text-gray-900 border-2 border-orange-500 shadow-2xl rounded-full px-5 py-3 flex items-center gap-2 font-semibold text-sm whitespace-nowrap">
+        <span className="text-2xl">🎈</span>
+        <div>
+          <span className="block text-orange-600 text-xs font-bold leading-tight">Click here to see</span>
+          <span className="block text-gray-800 font-bold leading-tight">Our Catering Service</span>
+        </div>
+        <div className="absolute top-full left-1/2 -translate-x-1/2 w-0.5 h-5 bg-orange-400 rounded-full" />
+      </div>
+    </motion.div>
+  );
+};
+
 const VideoExperience = () => {
-  const [videoStage, setVideoStage] = useState('welcome'); // 'welcome', 'waiting', 'main', 'complete'
-  const [showClickHere, setShowClickHere] = useState(false);
+  const [videoStage, setVideoStage] = useState('complete'); // 'main', 'complete'
   const [showMapModal, setShowMapModal] = useState(false);
-  const welcomeVideoRef = useRef(null);
   const mainVideoRef = useRef(null);
-  const isClickingRef = useRef(false);
   const navigate = useNavigate();
 
-  const welcomeVideoUrl = "https://customer-assets.emergentagent.com/job_51748072-d3a9-4e11-81ea-349df3f9a9ea/artifacts/j5snnush_WhatsApp%20Video%202026-04-04%20at%203.48.23%20PM%20%281%29.mp4";
   const mainVideoUrl = "https://customer-assets.emergentagent.com/job_51748072-d3a9-4e11-81ea-349df3f9a9ea/artifacts/qzo32wn2_km_20260404_720p_60f_20260404_195649.mp4";
 
-  useEffect(() => {
-    if (videoStage === 'welcome' && welcomeVideoRef.current) {
-      // Add a small delay to ensure video is loaded
-      const timer = setTimeout(() => {
-        if (welcomeVideoRef.current) {
-          welcomeVideoRef.current.play().catch(err => {
-            console.log("Autoplay prevented:", err);
-            // If autoplay fails, show click here immediately
-            setShowClickHere(true);
-            setVideoStage('waiting');
-          });
-        }
-      }, 500);
-      return () => clearTimeout(timer);
-    }
-  }, [videoStage]);
-
-  const handleWelcomeVideoEnd = () => {
-    console.log("Welcome video ended");
-    setShowClickHere(true);
-    setVideoStage('waiting');
-  };
-
-  const handleWelcomeVideoError = (e) => {
-    console.error("Welcome video error:", e);
-    // If video fails to load, show click here button immediately
-    setShowClickHere(true);
-    setVideoStage('waiting');
-  };
-
-  const handleClickHere = () => {
-    // Prevent double clicking from queueing multiple timeouts and breaking the media pipeline
-    if (isClickingRef.current) return;
-    isClickingRef.current = true;
-    
-    setShowClickHere(false);
+  const playMainVideo = () => {
     setVideoStage('main');
-    // Use setTimeout to ensure video element is rendered before playing
     setTimeout(() => {
       if (mainVideoRef.current) {
         mainVideoRef.current.play().catch(err => {
@@ -208,65 +196,11 @@ const VideoExperience = () => {
 
   return (
     <div className={`video-experience ${videoStage === 'complete' ? '!overflow-y-auto' : ''}`}>
+      {/* Balloon on complete stage */}
+      {videoStage === 'complete' && <ZigZagBalloon onClick={playMainVideo} />}
+
       {/* Floating Dish Decorations - ONLY SHOW DURING MAIN VIDEO */}
       {videoStage === 'main' && <FloatingDishes />}
-
-      {/* Welcome Video Section */}
-      {(videoStage === 'welcome' || videoStage === 'waiting') && (
-        <>
-          <div className="video-container">
-          {/* Mobile Frame */}
-          <div className="mobile-frame">
-            <video
-              ref={welcomeVideoRef}
-              className="welcome-video"
-              muted
-              playsInline
-              onEnded={handleWelcomeVideoEnd}
-              onError={handleWelcomeVideoError}
-              preload="auto"
-              controlsList="nodownload nofullscreen"
-              disablePictureInPicture
-              onContextMenu={(e) => e.preventDefault()}
-            >
-              <source src={welcomeVideoUrl} type="video/mp4" />
-              Your browser does not support the video tag.
-            </video>
-
-            {/* Text Overlay */}
-            <motion.div
-              className="video-overlay"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 1, delay: 0.5 }}
-            >
-              <div className="overlay-text">
-                <h2 className="welcome-text">Premium Catering in Kolkata & Howrah</h2>
-                <h1 className="welcome-title">Welcome to Rannaghar Caterer</h1>
-              </div>
-            </motion.div>
-
-            {/* Click Here Button - Top Right */}
-            <AnimatePresence>
-              {showClickHere && (
-                <motion.div
-                  className="click-here-container-topright"
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.8 }}
-                  transition={{ duration: 0.4 }}
-                >
-                  <button className="click-here-btn" onClick={handleClickHere}>
-                    <span>Click Here</span>
-                    <ArrowRight size={20} />
-                  </button>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-        </div>
-        </>
-      )}
 
       {/* Main Video Section */}
       {videoStage === 'main' && (
