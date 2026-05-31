@@ -259,6 +259,8 @@ const VideoExperience = () => {
               <video 
                 src="/logo_animation.mp4" 
                 autoPlay 
+                muted
+                loop
                 playsInline 
                 controlsList="nodownload"
                 style={{ width: '100%', display: 'block' }}
