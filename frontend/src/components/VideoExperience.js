@@ -1,6 +1,6 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useLayoutEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import Navbar from './Navbar';
 import { Phone, MessageCircle, ArrowRight, MapPin } from 'lucide-react';
 
@@ -144,10 +144,24 @@ const ZigZagBalloon = ({ onClick }) => {
 
 // Trigger redeployment
 const VideoExperience = () => {
-  const [videoStage, setVideoStage] = useState('complete'); // 'main', 'complete'
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const shouldPlay = searchParams.get('play') === 'true';
+
+  const [videoStage, setVideoStage] = useState(shouldPlay ? 'main' : 'complete'); // 'main', 'complete'
   const [showMapModal, setShowMapModal] = useState(false);
   const mainVideoRef = useRef(null);
   const navigate = useNavigate();
+
+  useLayoutEffect(() => {
+    if (shouldPlay && videoStage === 'main') {
+      if (mainVideoRef.current) {
+        mainVideoRef.current.play().catch(err => {
+          console.log("Main video autoplay failed:", err);
+        });
+      }
+    }
+  }, [shouldPlay, videoStage]);
 
   const mainVideoUrl = "https://customer-assets.emergentagent.com/job_51748072-d3a9-4e11-81ea-349df3f9a9ea/artifacts/qzo32wn2_km_20260404_720p_60f_20260404_195649.mp4";
 
