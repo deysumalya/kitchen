@@ -183,7 +183,7 @@ export const BlogPost = ({ lang }) => {
 
   return (
     <div className="min-h-screen bg-[#fcfaf7] pb-32">
-      <ZigZagBalloon onClick={() => navigate('/?play=true')} />
+      <ZigZagBalloon onClick={() => navigate('/')} />
 
       <motion.div
         initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}
