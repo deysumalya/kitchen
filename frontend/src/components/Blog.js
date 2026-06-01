@@ -218,11 +218,11 @@ export const BlogPost = ({ lang }) => {
               key={lang}
               initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }}
               transition={{ duration: 0.25 }}
-              className="prose prose-lg prose-orange max-w-none text-gray-800
-                         prose-h2:text-2xl prose-h2:font-extrabold prose-h2:text-gray-900 prose-h2:mt-12 prose-h2:mb-6
-                         prose-h3:text-xl prose-h3:font-bold prose-h3:text-gray-800 prose-h3:mt-8 prose-h3:mb-4
-                         prose-p:leading-relaxed prose-p:mb-6 prose-p:text-gray-800
-                         prose-li:my-2 prose-ul:mb-6"
+              className="max-w-none text-gray-800
+                         [&>h2]:text-3xl [&>h2]:font-extrabold [&>h2]:text-gray-900 [&>h2]:mt-14 [&>h2]:mb-8
+                         [&>h3]:text-2xl [&>h3]:font-bold [&>h3]:text-gray-800 [&>h3]:mt-10 [&>h3]:mb-4
+                         [&>p]:text-lg [&>p]:leading-[1.8] [&>p]:mb-8 [&>p]:text-gray-700
+                         [&>ul]:list-disc [&>ul]:pl-6 [&>ul]:mb-8 [&>ul>li]:mb-3 [&>ul>li]:text-lg [&>ul>li]:leading-relaxed"
               dangerouslySetInnerHTML={{ __html: t.content }}
             />
           </AnimatePresence>
