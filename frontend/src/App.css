@@ -1,14 +1,13 @@
-/* Root Variables - DB Brand Colors */
 :root {
-  --accent-ui-accent: #61525a;
-  --accent-tab: #61525a;
-  --text-light: #1e1919;
+  --accent-ui-accent: #8B0000; /* Rich Maroon */
+  --accent-tab: #8B0000;
+  --text-light: #1a1a1a;
   --text-dark: white;
-  --text-subtle-light: #736c64;
+  --text-subtle-light: #5c4d4d;
   --text-subtle-dark: #bbb5ae;
-  --surface-dark: #1e1919;
+  --surface-dark: #fdfbf7;
   --color-coconut: #f7f5f2;
-  --accent-line: #5f9dff;
+  --accent-line: #d4af37; /* Gold */
 }
 
 * {
@@ -140,11 +139,11 @@ p, span, div, a {
   }
 }
 
-/* Video Experience Styles */
+/* Video Experience Styles - Premium Wedding UI */
 .video-experience {
   min-height: 100vh;
   width: 100%;
-  background: linear-gradient(rgba(10, 10, 15, 0.4), rgba(10, 10, 15, 0.7)), url('./assets/food-bg.png') center/cover no-repeat fixed;
+  background: linear-gradient(rgba(255, 252, 248, 0.85), rgba(250, 240, 230, 0.95)), url('./assets/food-bg.png') center/cover no-repeat fixed;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -160,7 +159,7 @@ p, span, div, a {
   left: -50%;
   width: 200%;
   height: 200%;
-  background: radial-gradient(circle at center, rgba(97, 82, 90, 0.1) 0%, transparent 70%);
+  background: radial-gradient(circle at center, rgba(184, 134, 11, 0.15) 0%, transparent 70%); /* subtle gold glow */
   animation: rotate 30s linear infinite;
   pointer-events: none;
 }
@@ -184,7 +183,7 @@ p, span, div, a {
   z-index: 1;
 }
 
-/* Mobile Frame Styling */
+/* Mobile Frame Styling - Premium Light Version */
 .mobile-frame {
   position: relative;
   height: 90vh;
@@ -192,14 +191,15 @@ p, span, div, a {
   aspect-ratio: 9 / 16;
   width: auto;
   margin: 0 auto;
-  background: #1a1a1a;
+  background: #ffffff;
   border-radius: 40px;
   padding: 12px;
   box-shadow: 
-    0 0 0 8px #2a2a2a,
-    0 0 0 10px #1a1a1a,
-    0 20px 60px rgba(0, 0, 0, 0.5),
-    inset 0 0 2px rgba(255, 255, 255, 0.1);
+    0 0 0 6px #f3f4f6,
+    0 0 0 8px #e5e7eb,
+    0 0 0 10px #d1d5db,
+    0 30px 60px rgba(139, 0, 0, 0.15),
+    inset 0 0 2px rgba(0, 0, 0, 0.05);
   overflow: hidden;
 }
 
@@ -211,9 +211,11 @@ p, span, div, a {
   transform: translateX(-50%);
   width: 150px;
   height: 25px;
-  background: #1a1a1a;
+  background: #ffffff;
   border-radius: 0 0 20px 20px;
   z-index: 10;
+  border: 1px solid #e5e7eb;
+  border-top: none;
 }
 
 .welcome-video,
@@ -359,10 +361,10 @@ p, span, div, a {
 }
 
 .complete-section.light-theme .thank-you-title {
-  color: #1a1a1a !important;
+  color: #800000 !important; /* rich maroon */
   font-size: 52px;
   font-weight: 800;
-  text-shadow: 0 1px 2px rgba(0,0,0,0.08);
+  text-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 
 
