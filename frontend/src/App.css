@@ -187,10 +187,10 @@ p, span, div, a {
 /* Mobile Frame Styling */
 .mobile-frame {
   position: relative;
-  height: 90vh;
-  max-height: 850px;
+  width: 90vw;
+  max-width: 400px;
   aspect-ratio: 9 / 16;
-  width: auto;
+  max-height: 85vh;
   margin: 0 auto;
   background: #1a1a1a;
   border-radius: 40px;
