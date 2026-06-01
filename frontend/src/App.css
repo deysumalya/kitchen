@@ -190,7 +190,10 @@ p, span, div, a {
   max-height: 850px;
   aspect-ratio: 9 / 16;
   width: auto;
+  max-width: 90vw;
   margin: 0 auto;
+  min-height: 0;
+  min-width: 0;
   background: #ffffff;
   border-radius: 40px;
   padding: 12px;
