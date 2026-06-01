@@ -66,7 +66,7 @@ const Navbar = () => {
           <div className="flex items-center">
             <Link to="/" className="flex-shrink-0 flex items-center">
               <img
-                src="/main-logo.png"
+                src="/logo.png"
                 alt="Rannaghar Caterer Logo"
                 className="h-14 w-auto object-contain"
                 style={{ mixBlendMode: 'multiply' }}
